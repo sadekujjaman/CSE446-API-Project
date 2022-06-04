@@ -1,20 +1,40 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var multer = require("multer");
-// var mongoose = require("mongoose");
+const path = require("path");
 
 var upload = multer();
 var app = express();
+const apiUrl = "/api/v1";
+
 // for parsing application/json
 app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
+app.use(upload.array());
 
 const mongooseConFactory = require("./database/connection");
 const mongooseCon = mongooseConFactory();
 
 const Product = mongooseCon.models.Product;
 
-app.get("/products", (req, res) => {
+app.get("", (req, res) => {
+  return res.sendFile(path.join(__dirname + "/index.html"));
+});
+
+app.get(`/products`, (req, res) => {
+  res.sendFile(path.join(__dirname + "/products.html"));
+});
+
+app.get(`${apiUrl}/products`, (req, res) => {
+  Product.find({}, (err, products) => {
+    if (err) {
+      return res.json({ error: "Error occurred during fetching products" });
+    }
+    return res.json({ products });
+  });
+});
+
+app.get(`${apiUrl}/products`, (req, res) => {
   Product.find({}, (err, products) => {
     if (err) {
       return res.json({ error: "Error occurred during fetching products" });

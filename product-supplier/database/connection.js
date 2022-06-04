@@ -14,18 +14,3 @@ module.exports = function connectionFactory() {
   conn.model("Product", productSchema);
   return conn;
 };
-
-// var mongoose = require("mongoose");
-
-// const uri = `${process.env.MONGODB_URI}`;
-
-// try {
-//   // Connect to the MongoDB cluster
-//   mongoose.connect(
-//     uri,
-//     { useNewUrlParser: true, useUnifiedTopology: true },
-//     () => console.log(" Mongoose is connected")
-//   );
-// } catch (e) {
-//   console.log("could not connect");
-// }

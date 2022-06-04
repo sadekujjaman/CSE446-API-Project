@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <title>Me Supplier</title>
+</head>
+<script>
+    function clickMe(){
+        fetch('http://localhost:3000/api/v1/products')
+            .then(response => response.json())
+            .then(({products})=>{
+                
+                const productsDiv = document.getElementById('products')
+                products.forEach((product)=>{
+                    const eachProductDiv = document.createElement("div");
+                    const nameDiv = document.createElement("h3");
+                    nameDiv.innerText = product.name
+                    eachProductDiv.appendChild(nameDiv)
+                    productsDiv.appendChild(eachProductDiv)
+                })
+                
+            });
+    }
+    </script>
+<body>
+   <div>
+    <h1>Products</h1>
+    <button onclick="clickMe()">Show products</button>
+    <div id="products">
+
+    </div>
+   </div>
+</body>
+
+</html>
