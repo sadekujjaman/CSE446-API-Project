@@ -34,15 +34,6 @@ app.get(`${apiUrl}/products`, (req, res) => {
   });
 });
 
-app.get(`${apiUrl}/products`, (req, res) => {
-  Product.find({}, (err, products) => {
-    if (err) {
-      return res.json({ error: "Error occurred during fetching products" });
-    }
-    return res.json({ products });
-  });
-});
-
 app.post("/addProduct", urlencodedParser, (req, res) => {
   const { name, category, description, price } = req.body;
 
@@ -60,4 +51,4 @@ app.post("/addProduct", urlencodedParser, (req, res) => {
   });
 });
 
-app.listen(3000);
+app.listen(4000);
