@@ -30,7 +30,26 @@ app.get(`${apiUrl}/products`, (req, res) => {
     if (err) {
       return res.json({ error: "Error occurred during fetching products" });
     }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     return res.json({ products });
+  });
+});
+
+app.get(`${apiUrl}/product/:id`, (req, res) => {
+  Product.findOne({ _id: req.params.id }, (err, product) => {
+    if (err) {
+      return res.json({ error: "Error occurred during fetching products" });
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    return res.json({ product });
   });
 });
 

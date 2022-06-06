@@ -1,0 +1,73 @@
+{
+  "name": "project-distribution",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.8.2",
+    "@mui/material": "^5.1.0",
+    "@mui/styles": "^5.8.0",
+    "@supabase/supabase-js": "^1.25.2",
+    "axios": "^0.24.0",
+    "formik": "^2.2.9",
+    "next": "12.0.0",
+    "next-auth": "^3.29.0",
+    "nodemon": "^2.0.13",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-material-ui-carousel": "^3.4.2",
+    "react-window": "^1.8.6",
+    "styled-components": "^5.3.1",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.6",
+    "@types/react": "17.0.33",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-window": "^1.8.5",
+    "@types/styled-components": "^5.1.14",
+    "babel-plugin-styled-components": "^1.13.2",
+    "eslint": "7",
+    "eslint-config-next": "12.0.0",
+    "typescript": "4.4.4"
+  },
+  "babel": {
+    "env": {
+      "development": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "production": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": false
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

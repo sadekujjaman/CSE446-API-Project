@@ -1,0 +1,12 @@
+#!/bin/bash
+# start a pull request in a new branch develop off develop
+set -xe
+
+git checkout main
+git pull
+git checkout -b "$1"
+# commit something since you can't create an empty pr
+# would be better if we used the unmangled issue title
+git commit --allow-empty -m "$1"
+git push --set-upstream origin "$1"
+gh pr create --base main --web
