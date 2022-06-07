@@ -8,7 +8,21 @@ import React, {
 } from "react";
 import { Product } from "../types/utils";
 
-interface CartProduct {
+export interface Address {
+  city: string;
+  area: string;
+  houseNo: string;
+  phone: string;
+}
+
+export interface Transaction {
+  accountNo: string;
+  name: string;
+  payable: string;
+  transactionId?: string;
+}
+
+export interface CartProduct {
   product: Product;
   count: number;
 }
@@ -19,8 +33,10 @@ interface CartContextType {
   deleteProduct: (productInfo: Product) => void;
   clearCart: () => void;
   getCountById: (productId: string) => void;
-  getAddresses: () => void;
-  addAddress: (address: string) => void;
+  getAddress: () => Address;
+  addAddress: (address: Address) => void;
+  addTransaction: (transaction: Transaction) => void;
+  getTransaction: () => Transaction;
 }
 
 export const CartContext = createContext<CartContextType>(
@@ -29,7 +45,8 @@ export const CartContext = createContext<CartContextType>(
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<CartProduct[]>([]);
-  const [addresses, setAddresses] = useState<string[]>([]);
+  const [address, setAddress] = useState<Address>();
+  const [transaction, setTransaction] = useState<Transaction>();
 
   const isProductExist = useCallback(
     (productInfo: Product) => {
@@ -103,15 +120,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setProducts([]);
   };
 
-  const getAddresses = useCallback(() => {
-    return addresses;
-  }, [addresses]);
+  const getAddress = useCallback(() => {
+    return address as Address;
+  }, [address]);
 
-  const addAddress = (address: string) => {
-    setAddresses((prevAddresses: string[]) => {
-      const updatedAddress = [...prevAddresses, address];
-      return updatedAddress;
-    });
+  const addAddress = (address: Address) => {
+    setAddress(address);
+  };
+
+  const getTransaction = useCallback(() => {
+    return transaction as Transaction;
+  }, [transaction]);
+
+  const addTransaction = (transaction: Transaction) => {
+    setTransaction(transaction);
   };
 
   const value = useMemo(
@@ -120,11 +142,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       addProduct,
       deleteProduct,
       getCountById,
-      getAddresses,
+      getAddress,
       addAddress,
       clearCart,
+      getTransaction,
+      addTransaction,
     }),
-    [addProduct, deleteProduct, getAddresses, getCountById, products]
+    [addProduct, deleteProduct, getAddress, getCountById, products]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -132,4 +156,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCart = () => {
   return useContext(CartContext);
+};
+
+export const getTotalPrice = ({ products }: { products: CartProduct[] }) => {
+  const price = products
+    .map((product) => ({
+      price: product.product.price ?? 0,
+      count: product.count,
+    }))
+    .reduce((prev, product) => prev + product.count * product.price, 0);
+
+  return price;
 };

@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useCart } from "./hooks/cart";
+import { getTotalPrice, useCart } from "./hooks/cart";
 import { Typography } from "./components/widgets";
 import { Product } from "./types/utils";
 import Link from "next/link";
@@ -34,16 +34,7 @@ const CartDashboard = () => {
     }
     addProduct(product, count - 1);
   };
-  const getTotalPrice = () => {
-    const price = products
-      .map((product) => ({
-        price: product.product.price ?? 0,
-        count: product.count,
-      }))
-      .reduce((prev, product) => prev + product.count * product.price, 0);
 
-    return price;
-  };
   //   console.log({ products });
   return (
     <Box>
@@ -118,7 +109,9 @@ const CartDashboard = () => {
               </TableCell>
               <TableCell></TableCell>
               <TableCell>
-                <Typography variant="h5">{getTotalPrice()}</Typography>
+                <Typography variant="h5">
+                  {getTotalPrice({ products })}
+                </Typography>
               </TableCell>
               <TableCell>
                 <Button variant="contained">

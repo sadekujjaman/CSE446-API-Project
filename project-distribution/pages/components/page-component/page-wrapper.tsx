@@ -258,6 +258,7 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                 </Button>
               </Box>
             </Modal>
+            <div style={{ marginTop: "500px" }}></div>
             <Footer />
           </PageWrapper>
         </Box>

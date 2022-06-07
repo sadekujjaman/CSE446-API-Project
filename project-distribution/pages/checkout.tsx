@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useCart } from "./hooks/cart";
+import { Address, useCart } from "./hooks/cart";
 import { Typography } from "./components/widgets";
 import { Product } from "./types/utils";
 import Link from "next/link";
@@ -27,13 +27,7 @@ import * as widgets from "./components/widgets";
 import * as formik from "formik";
 import { useState } from "react";
 import { Button } from "./components/common/button";
-
-interface Address {
-  city: string;
-  area: string;
-  houseNo: string;
-  phone: string;
-}
+import router from "next/router";
 
 const AddressInfoSchema = Yup.object().shape({
   city: Yup.string().required("Required"),
@@ -64,12 +58,13 @@ const AddressInfoForm = () => {
   );
 };
 
-const AddressInfoPromt = () => {
+const AddressInfoPromt = ({ address }: { address: Address }) => {
+  const { addAddress } = useCart();
   const [initialValues, setInitialValues] = useState<Address>({
-    city: "",
-    area: "",
-    houseNo: "",
-    phone: "",
+    city: address?.city ?? "",
+    area: address?.area ?? "",
+    houseNo: address?.houseNo ?? "",
+    phone: address?.phone ?? "",
   } as Address);
 
   const saveProjectInfo = async (
@@ -78,6 +73,8 @@ const AddressInfoPromt = () => {
   ) => {
     try {
       console.log(addressData);
+      addAddress({ ...addressData });
+      router.push("/make-transaction");
     } catch (e) {
       console.log("Error occured during user info saved... ", e);
     }
@@ -115,14 +112,14 @@ const AddressInfoPromt = () => {
 };
 
 const CheckoutDashboard = () => {
-  const { products } = useCart();
-
+  const { products, getAddress } = useCart();
+  const address = getAddress();
   return (
     <>
       <ShortPageForm>
         {products && (
           <>
-            <AddressInfoPromt />
+            <AddressInfoPromt address={address} />
           </>
         )}
       </ShortPageForm>
