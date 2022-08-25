@@ -1,3 +1,4 @@
+require("dotenv").config({ path: ".env" });
 var express = require("express");
 var bodyParser = require("body-parser");
 var multer = require("multer");
@@ -53,7 +54,7 @@ app.get(`${apiUrl}/product/:id`, (req, res) => {
   });
 });
 
-app.post("/addProduct", urlencodedParser, (req, res) => {
+app.post(`${apiUrl}/addProduct`, urlencodedParser, (req, res) => {
   const { name, category, description, price } = req.body;
 
   const product = new Product({
