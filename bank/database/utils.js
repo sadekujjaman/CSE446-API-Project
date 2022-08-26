@@ -1,6 +1,6 @@
 const models = require("./models");
-
 const Account = models.Account;
+const Transaction = models.Transaction;
 
 async function deposit(accountNo, balance) {
   const account = await Account.findOne({ accountNo });
@@ -24,31 +24,61 @@ async function withdraw(accountNo, balance) {
   if (_balance < 0) {
     throw new Error("Insufficient balance");
   }
-  await Account.updateOne(
+  await account.updateOne(
     { accountNo },
     { $set: { balance: _balance } },
     { upsert: true }
   );
 }
 
-async function makeTransaction(senderAccountNo, recieverAccountNo, balance) {
-  const senderAccount = await Account.findOne({ accountNo: senderAccountNo });
-  const recieverAccount = await Account.findOne({
-    accountNo: recieverAccountNo,
+async function postTransaction(senderAccount, receiverAccount, balance) {
+  const senderAccountNo = senderAccount.accountNo;
+  const receiverAccountNo = receiverAccount.accountNo;
+  const max = 999999999;
+  const randomNumber = parseInt(Math.floor(Math.random() * max));
+  const transactionId = `${Date.now()}${randomNumber}`;
+  const transaction = new Transaction({
+    senderAccountNo,
+    receiverAccountNo,
+    balance,
+    transactionId,
+    transactionAt: new Date().toISOString(),
   });
-  if (!senderAccount || !recieverAccountNo) {
-    const message = senderAccount
+  await transaction.save();
+}
+
+async function makeTransaction(senderAccountNo, receiverAccountNo, balance) {
+  if (senderAccountNo === receiverAccountNo) {
+    throw new Error("Can't possible to make transaction in same account.");
+  }
+  const senderAccount = await Account.findOne({ accountNo: senderAccountNo });
+
+  const receiverAccount = await Account.findOne({
+    accountNo: receiverAccountNo,
+  });
+
+  if (!senderAccount || !receiverAccount) {
+    const message = !senderAccount
       ? "Sender account " + senderAccountNo + " not found"
-      : "Receiver account " + recieverAccountNo + " not found";
+      : "Receiver account " + receiverAccountNo + " not found";
     throw new Error(message);
   }
   const _senderBalance = senderAccount.balance - balance;
-  const _recieverBalance = recieverAccount.balance + balance;
+  const _recieverBalance = receiverAccount.balance + balance;
   if (_senderBalance < 0) {
     throw new Error("Insufficient balance to make this transaction");
   }
-  await deposit(recieverAccount, balance);
-  await deposit(recieverAccount, balance);
+  await senderAccount.updateOne(
+    { accountNo: senderAccountNo },
+    { $set: { balance: _senderBalance } },
+    { upsert: true }
+  );
+  await receiverAccount.updateOne(
+    { accountNo: receiverAccountNo },
+    { $set: { balance: _recieverBalance } },
+    { upsert: true }
+  );
+  await postTransaction(senderAccount, receiverAccount, balance);
 }
 
 module.exports = {

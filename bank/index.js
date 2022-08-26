@@ -86,15 +86,16 @@ app.post(
   urlencodedParser,
   async (req, res) => {
     try {
-      const { senderAccountNo, recieverAccountNo, balance } = req.body;
+      const { senderAccountNo, receiverAccountNo, balance } = req.body;
 
-      const dep = await makeTransaction(
-        senderAccountNo,
-        recieverAccountNo,
-        balance
-      );
+      await makeTransaction(senderAccountNo, receiverAccountNo, balance);
       res.send(
-        "Successfully withdraw " + balance + " from account " + accountNo
+        "Transaction success " +
+          balance +
+          ", from account " +
+          senderAccountNo +
+          " to account " +
+          receiverAccountNo
       );
     } catch (err) {
       res.send("Error occurred! " + err.message);
