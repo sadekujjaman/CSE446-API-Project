@@ -11,19 +11,24 @@ export type Bank = {
 };
 
 export type UserInfo = {
-  id: string | number;
   name: string;
   email: string;
   contactNo?: string;
-  department?: string;
-  avatarURL?: string;
+  address?: string;
 };
 
 export type User = {
-  bank?: Bank;
-  student?: Student;
-  teacher?: Teacher;
+  accountName?: string;
+  accountNo?: string;
+  secret?: number;
 } & UserInfo;
+
+export type Address = {
+  city?: string;
+  area?: string;
+  houseNo?: string;
+  phone?: string;
+};
 
 export type StudentInfo = {
   id: string | number;

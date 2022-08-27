@@ -28,14 +28,14 @@ export default NextAuth({
     //   clientId: process.env.FACEBOOK_ID,
     //   clientSecret: process.env.FACEBOOK_SECRET,
     // }),
-    Providers.GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      // authorizationUrl:
-      //   "https://github.com/login/oauth/authorize?scope=read:user+user:email",
-      // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
-      // scope: ["read:user", "user:email"],
-    }),
+    // Providers.GitHub({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    //   // authorizationUrl:
+    //   //   "https://github.com/login/oauth/authorize?scope=read:user+user:email",
+    //   // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
+    //   // scope: ["read:user", "user:email"],
+    // }),
     Providers.Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
@@ -107,7 +107,6 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn(user, account, profile) {
-      console.log(">>", account);
       return true;
       // if (account.provider === "github") {
       //   return true;

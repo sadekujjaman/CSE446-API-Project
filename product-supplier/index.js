@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var multer = require("multer");
 const path = require("path");
+const { Product, Order } = require("./database/models");
 
 var upload = multer();
 var app = express();
@@ -12,11 +13,6 @@ const apiUrl = "/api/v1";
 app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 app.use(upload.array());
-
-const mongooseConFactory = require("./database/connection");
-const mongooseCon = mongooseConFactory();
-
-const Product = mongooseCon.models.Product;
 
 app.get("", (req, res) => {
   return res.sendFile(path.join(__dirname + "/index.html"));
@@ -68,6 +64,23 @@ app.post(`${apiUrl}/addProduct`, urlencodedParser, (req, res) => {
       return res.send("Error occurred, product saved failed. try again!");
     }
     res.send("Product saved successfully!");
+  });
+});
+
+app.post(`${apiUrl}/createOrder`, urlencodedParser, (req, res) => {
+  const { products, address, transactionId, amount } = req.body;
+
+  const order = new Order({
+    products,
+    address,
+    transactionId,
+    amount,
+  });
+  order.save(function (err) {
+    if (err) {
+      return res.send("Error occurred, order creation failed. try again!");
+    }
+    res.send("Order created successfully!");
   });
 });
 

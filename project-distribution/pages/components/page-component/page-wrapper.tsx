@@ -24,6 +24,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useUser } from "../../utils/hooks-context";
 import { Banner } from "./banner";
+import { User } from "../../types/utils";
 
 interface PageProps {
   children: () => ReactNode;
@@ -85,9 +86,12 @@ const mdTheme = createTheme({
 });
 
 export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
-  // const router = useRouter();
-  const { user } = useUser();
-  const { bank } = user ?? {};
+  const router = useRouter();
+  const { pathname } = router;
+  const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(
+    null
+  );
+  const { user, updateUser } = useUser();
   const [session, loading] = useSession();
   const [open, setOpen] = useState(false);
   const [addingBankAccount, setAddingBankAccount] = useState(false);
@@ -99,7 +103,7 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
     setModalOpen(true);
   };
   const handleModalClose = () => setModalOpen(false);
-  const bankNameRef = useRef(""); //creating a refernce for TextField Component
+  const accountNameRef = useRef(""); //creating a refernce for TextField Component
   const accountNoRef = useRef(""); //creating a refernce for TextField Component
   const secretRef = useRef(""); //creating a refernce for TextField Component
 
@@ -107,32 +111,51 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
     setOpen(!open);
   };
   useEffect(() => {
-    if (user && !user?.bank) {
+    if (pathname === "/" && user && !user?.accountNo) {
       setModalOpen(true);
     } else {
       setModalOpen(false);
     }
-  }, [user]);
+  }, [pathname, user]);
 
   const handleAddBankInfo = async () => {
-    const bankName = bankNameRef.current.value;
+    const accountName = accountNameRef.current.value;
     const accountNo = accountNoRef.current.value;
     const secret = secretRef.current.value;
-
+    setModalErrorMessage(null);
     setAddingBankAccount(true);
     try {
-      const studentId = user?.student?.id;
-      const { data } = await axios.post(`/api/bank/${user?.email}`, {
-        bankName,
+      const { data } = await axios.post(`/api/users/email/${user?.email}`, {
+        accountName,
         accountNo,
         secret,
         email: user?.email,
       });
+      if (data?.accountInfo) {
+        const { accountInfo } = data;
+        const newUser: User = {
+          ...(user as User),
+          accountName: accountInfo.accountName,
+          accountNo: accountInfo.accountNo,
+          secret: accountInfo.secret,
+        };
 
-      <Alert severity="success">Account added successfully</Alert>;
-      setModalOpen(false);
-    } catch (e) {
-      console.log(e);
+        updateUser(newUser);
+        <Alert severity="success">Account added successfully</Alert>;
+        setModalOpen(false);
+      }
+      if (data?.error) {
+        setModalErrorMessage(data?.error);
+      }
+
+      console.log({ data });
+    } catch (err: any) {
+      if (typeof err === "string") {
+        setModalErrorMessage(err);
+      } else {
+        const msg = err?.message ? err?.message : "Error occurred!";
+        setModalErrorMessage(msg);
+      }
     }
     setAddingBankAccount(false);
   };
@@ -175,11 +198,11 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                   handleModalOpen={handleModalOpen}
                   handleModalClose={handleModalClose}
                 />
-                <IconButton color="inherit" sx={{ float: "right" }}>
+                {/* <IconButton color="inherit" sx={{ float: "right" }}>
                   <Badge badgeContent={4} color="primary">
                     <NotificationsIcon />
                   </Badge>
-                </IconButton>
+                </IconButton> */}
               </Toolbar>
             </AppBar>
 
@@ -223,11 +246,20 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                 <Typography id="modal-modal-title" variant="h6">
                   Setup bank account
                 </Typography>
+                {modalErrorMessage && (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="body1"
+                    sx={{ color: "red" }}
+                  >
+                    {modalErrorMessage}
+                  </Typography>
+                )}
                 <TextField
                   id="outlined-basic"
-                  label="Bank Name"
+                  label="Account Name"
                   variant="outlined"
-                  inputRef={bankNameRef}
+                  inputRef={accountNameRef}
                 />
                 <TextField
                   id="outlined-basic"

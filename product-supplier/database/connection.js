@@ -8,9 +8,11 @@
 
 const mongoose = require("mongoose");
 const productSchema = require("./schemas/product");
+const orderSchema = require("./schemas/order");
 
 module.exports = function connectionFactory() {
   const conn = mongoose.createConnection(process.env.MONGODB_URI);
   conn.model("Product", productSchema);
+  conn.model("Order", orderSchema);
   return conn;
 };

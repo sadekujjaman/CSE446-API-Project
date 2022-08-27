@@ -8,11 +8,14 @@ import {
   Avatar as MuiAvatar,
   Typography,
   Divider,
+  IconButton,
+  Badge,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { useUser } from "../../utils/hooks-context";
+import { useCart } from "../../hooks/cart";
 
 const Navbar = styled.div`
   width: 100%;
@@ -78,7 +81,7 @@ export const Nav = ({
   handleModalClose: () => void;
 }) => {
   const { user, updateUser } = useUser();
-  const [userId, setUserId] = useState(null);
+  const { products, addProduct, deleteProduct } = useCart();
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const handleClick = (event: any) => {
@@ -94,23 +97,26 @@ export const Nav = ({
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log(session.user.email);
       try {
         const { data } = await axios.get(
           `/api/users/email/${session.user.email}`
         );
-        console.log(data);
-        if (data) {
-          setUserId(data.id);
-          updateUser(data);
+        if (data && data?.accountInfo) {
+          updateUser({
+            name: session.user.name,
+            email: session.user.email,
+            ...data?.accountInfo,
+          });
+        } else if (session.user) {
+          updateUser({ name: session.user.name, email: session.user.email });
         }
       } catch (e) {
         console.log(e);
       }
     };
 
-    session && !userId && fetchUser();
-  }, [session, updateUser, userId]);
+    session && session.user && !user && fetchUser();
+  }, [session, user]);
 
   return (
     <Navbar>
@@ -135,6 +141,21 @@ export const Nav = ({
             </button>
           </div>
         )}
+        <div className="navbar__item">
+          <Link
+            href={{
+              pathname: "/cart",
+              query: {},
+            }}
+            passHref
+          >
+            <IconButton color="inherit" sx={{ float: "right" }}>
+              <Badge badgeContent={products.length} color="primary">
+                <div className="navbar__link">Cart</div>
+              </Badge>
+            </IconButton>
+          </Link>
+        </div>
 
         {session && !loading && (
           <>
@@ -147,17 +168,6 @@ export const Nav = ({
                 passHref
               >
                 <div className="navbar__link">Products</div>
-              </Link>
-            </div>
-            <div className="navbar__item">
-              <Link
-                href={{
-                  pathname: "/cart",
-                  query: {},
-                }}
-                passHref
-              >
-                <div className="navbar__link">Cart</div>
               </Link>
             </div>
           </>
@@ -240,13 +250,7 @@ export const Nav = ({
                           <Link
                             passHref
                             href={{
-                              pathname: userId
-                                ? `/users/${userId}`
-                                : `/users/create`,
-                              query: {
-                                userId: userId,
-                                email: session.user.email,
-                              },
+                              pathname: `/users/${user?.email}`,
                             }}
                           >
                             Manage Profile

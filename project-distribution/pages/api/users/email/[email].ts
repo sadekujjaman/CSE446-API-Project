@@ -1,104 +1,69 @@
+import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { User } from "../../../types/utils";
-import { supabase } from "../../../utils/supabaseClient";
+import { connectToDatabase } from "../../../utils/mongodb";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { database } = await connectToDatabase();
+  const collection = database.collection(
+    process.env.NEXT_ATLAS_COLLECTION as string
+  );
+
   if (req.method === "GET") {
-    const { data, error } = await getUserFromSupabase(
-      req.query.email as string
-    );
-    if (error) {
-      return res.status(403).json({ error: error });
+    const email = req.query.email;
+
+    const results = await collection.find({ email }).limit(1).toArray();
+
+    if (!results || results.length === 0) {
+      res.status(200).json({ status: "error" });
+      return;
     }
-    return res.status(200).json(data);
+
+    res.status(200).json({ accountInfo: results[0] });
+  } else if (req.method === "POST") {
+    try {
+      const { email, accountNo, accountName, secret, name, contactNo } =
+        req.body;
+      // const { data } = await axios.get(
+      //   `http://localhost:4002/api/v1/account/${_accountNo}`
+      // );
+      // const account = data?.account;
+      // if (!account) {
+      //   res.status(200).json({ error: "Invalid account info!" });
+      //   return;
+      // }
+      // const { accountNo, name } = account;
+
+      const accountInfo = {
+        email,
+        accountName,
+        secret,
+        accountNo,
+        name,
+        contactNo,
+      };
+      const cleanedInfo = Object.fromEntries(
+        Object.entries(accountInfo)
+          .filter(([key, value]) => value)
+          .map(([key, value]) => [key, value])
+      );
+
+      const results = await collection.updateOne(
+        { email },
+        {
+          $set: cleanedInfo,
+        },
+        { upsert: true }
+      );
+
+      const resp = await collection.find({ email }).limit(1).toArray();
+
+      res.status(200).json({ status: "Ok", accountInfo: resp[0] });
+    } catch (err) {
+      console.log(err);
+      res.status(200).json({ error: "Error occurred!" });
+    }
   }
 }
-
-const getUserFromSupabase = async (email: string) => {
-  const { data, error } = await supabase
-    .from("User")
-    .select(
-      `name,
-      email,
-      contactNo,
-      id,
-      Bank(id, accountNo, name, secret)
-      `
-    )
-    .eq("email", email)
-    .single();
-
-  if (error || !data) {
-    return { error: error?.message };
-  }
-  const { Bank, ...userInfo } = data;
-  userInfo["bank"] = Bank ? { ...Bank } : null;
-  return { data: userInfo };
-};
-
-const getTeacherInfo = (teacher: any) => {
-  if (!teacher) {
-    return null;
-  }
-  const { Course, User, ...teacherInfo } = teacher;
-  teacherInfo["name"] = User.name;
-  teacherInfo["courses"] = Course.map((course: any) => {
-    const { Project, Teacher, Student, ...courseInfo } = course;
-    courseInfo["projects"] = getProjectsInfo(Project);
-    courseInfo["teachers"] = Teacher.map((teacher: any) => {
-      const { User, ...teacherInfo } = teacher;
-      teacherInfo["name"] = User.name;
-      return teacherInfo;
-    });
-    courseInfo["students"] = Student.map((student: any) => ({
-      id: student.id,
-      userId: student.User.id,
-      name: student.User.name,
-    }));
-    return courseInfo;
-  });
-
-  return teacherInfo;
-};
-
-const getStudentInfo = (student: any) => {
-  if (!student) {
-    return null;
-  }
-  const { Course, Project, ...studentInfo } = student;
-  studentInfo["projects"] = getProjectsInfo(Project);
-
-  studentInfo["courses"] = Course.map((course: any) => {
-    const { Teacher, ...courseInfo } = course;
-    courseInfo["teachers"] = Teacher.map((teacher: any) => {
-      const { User, ...teacherInfo } = teacher;
-      teacherInfo["name"] = User.name;
-      return teacherInfo;
-    });
-    return courseInfo;
-  });
-  return studentInfo;
-};
-
-const getProjectsInfo = (projects: any) => {
-  if (!projects) {
-    return null;
-  }
-  return projects.map((project: any) => {
-    const { Team, Review, Course, ...projectInfo } = project;
-    const { name } = Team;
-    const teamId = Team.id;
-    const authors = Team.Student.map((s: any) => ({ ...s.User }));
-    projectInfo["teamInfo"] = { teamId, name, authors };
-    projectInfo["courseInfo"] = { ...Course };
-    projectInfo["reviews"] = Review.map((review: any) => {
-      const { User, ...reviewInfo } = review;
-      reviewInfo["userName"] = User.name;
-      return reviewInfo;
-    });
-    return projectInfo;
-  });
-};

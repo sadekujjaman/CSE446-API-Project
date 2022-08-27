@@ -6,18 +6,11 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { Product } from "../types/utils";
-
-export interface Address {
-  city: string;
-  area: string;
-  houseNo: string;
-  phone: string;
-}
+import { Address, Product } from "../types/utils";
 
 export interface Transaction {
   accountNo: string;
-  name: string;
+  accountName?: string;
   payable: string;
   transactionId?: string;
 }

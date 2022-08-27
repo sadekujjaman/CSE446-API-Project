@@ -24,7 +24,7 @@ async function withdraw(accountNo, balance) {
   if (_balance < 0) {
     throw new Error("Insufficient balance");
   }
-  await account.updateOne(
+  await Account.updateOne(
     { accountNo },
     { $set: { balance: _balance } },
     { upsert: true }
@@ -40,11 +40,12 @@ async function postTransaction(senderAccount, receiverAccount, balance) {
   const transaction = new Transaction({
     senderAccountNo,
     receiverAccountNo,
-    balance,
+    transactionAmount: balance,
     transactionId,
     transactionAt: new Date().toISOString(),
   });
   await transaction.save();
+  return transactionId;
 }
 
 async function makeTransaction(senderAccountNo, receiverAccountNo, balance) {
@@ -68,17 +69,29 @@ async function makeTransaction(senderAccountNo, receiverAccountNo, balance) {
   if (_senderBalance < 0) {
     throw new Error("Insufficient balance to make this transaction");
   }
-  await senderAccount.updateOne(
+  console.log(
+    { senderAccount },
+    { receiverAccount },
+    { _senderBalance },
+    { _recieverBalance }
+  );
+
+  await Account.updateOne(
     { accountNo: senderAccountNo },
     { $set: { balance: _senderBalance } },
     { upsert: true }
   );
-  await receiverAccount.updateOne(
+  await Account.updateOne(
     { accountNo: receiverAccountNo },
     { $set: { balance: _recieverBalance } },
     { upsert: true }
   );
-  await postTransaction(senderAccount, receiverAccount, balance);
+  const transactionId = await postTransaction(
+    senderAccount,
+    receiverAccount,
+    balance
+  );
+  return transactionId;
 }
 
 module.exports = {

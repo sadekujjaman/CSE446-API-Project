@@ -18,6 +18,7 @@ app.use(upload.array());
 const Account = models.Account;
 
 app.get(`${apiUrl}/account/:accountNo`, (req, res) => {
+  console.log("HERE");
   Account.findOne({ accountNo: req.params.accountNo }, (err, account) => {
     if (err) {
       console.log(err);
@@ -33,13 +34,14 @@ app.get(`${apiUrl}/account/:accountNo`, (req, res) => {
 });
 
 app.post(`${apiUrl}/account/createAccount`, urlencodedParser, (req, res) => {
-  const { name, address, accountNo, balance } = req.body;
+  const { name, address, accountNo, balance, email, secret } = req.body;
 
   const account = new Account({
     name,
     address,
     accountNo,
     balance,
+    email,
   });
   account.save(function (err) {
     if (err) {
@@ -88,15 +90,21 @@ app.post(
     try {
       const { senderAccountNo, receiverAccountNo, balance } = req.body;
 
-      await makeTransaction(senderAccountNo, receiverAccountNo, balance);
-      res.send(
-        "Transaction success " +
+      const transactionId = await makeTransaction(
+        senderAccountNo,
+        receiverAccountNo,
+        parseFloat(balance)
+      );
+      res.json({
+        transactionId,
+        message:
+          "Transaction success " +
           balance +
           ", from account " +
           senderAccountNo +
           " to account " +
-          receiverAccountNo
-      );
+          receiverAccountNo,
+      });
     } catch (err) {
       res.send("Error occurred! " + err.message);
     }

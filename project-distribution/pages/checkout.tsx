@@ -16,9 +16,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Address, useCart } from "./hooks/cart";
+import { useCart } from "./hooks/cart";
 import { Typography } from "./components/widgets";
-import { Product } from "./types/utils";
+import { Address, Product } from "./types/utils";
 import Link from "next/link";
 import { ShortPageForm } from "./components/layout/dashboard-wrapper";
 import * as Yup from "yup";
@@ -67,10 +67,7 @@ const AddressInfoPromt = ({ address }: { address: Address }) => {
     phone: address?.phone ?? "",
   } as Address);
 
-  const saveProjectInfo = async (
-    addressData: Address,
-    { setSubmitting }: any
-  ) => {
+  const saveAddress = async (addressData: Address, { setSubmitting }: any) => {
     try {
       console.log(addressData);
       addAddress({ ...addressData });
@@ -103,7 +100,7 @@ const AddressInfoPromt = ({ address }: { address: Address }) => {
         initialValues={initialValues}
         validationSchema={AddressInfoSchema}
         validate={extraValidate}
-        onSubmit={saveProjectInfo}
+        onSubmit={saveAddress}
       >
         <AddressInfoForm />
       </formik.Formik>

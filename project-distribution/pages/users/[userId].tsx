@@ -19,10 +19,12 @@ import { Button } from "../components/common/button";
 import * as Yup from "yup";
 import { Typography } from "../components/widgets";
 import {
+  Alert,
   Checkbox,
   Container,
   FormControlLabel,
   FormGroup,
+  Snackbar,
   Switch,
   ToggleButton,
   ToggleButtonGroup,
@@ -36,202 +38,9 @@ const TeacherInfoSchema = Yup.object().shape({
   designation: Yup.string().required("Required"),
 });
 
-const TeacherInfoForm = () => {
-  const { isSubmitting, values, setFieldValue, isValid } =
-    formik.useFormikContext() as any;
-  return (
-    <formik.Form>
-      <widgets.TextField
-        name="designation"
-        label="Designation"
-        fullWidth={true}
-      />
-
-      <br />
-      <Button
-        disabled={isSubmitting || !isValid}
-        label="Save"
-        variant="contained"
-        type="submit"
-        size="large"
-        style={{ margin: "10px" }}
-      />
-    </formik.Form>
-  );
-};
-
-const TeacherInfoPromt = ({
-  teacher,
-  userId,
-  createNew,
-}: {
-  teacher: TeacherInfo;
-  userId: string | number;
-  createNew?: boolean;
-}) => {
-  const initialValues = teacher;
-
-  const { query } = useRouter();
-
-  const saveTeacherInfo = async (
-    teacherData: Teacher,
-    { setSubmitting }: any
-  ) => {
-    try {
-      console.log(teacherData);
-      if (!createNew) {
-        const { name, ...teacherInfo } = teacherData;
-        const { data } = await axios.post(`/api/teachers/update-info`, {
-          ...teacherInfo,
-        });
-        console.log(data);
-      } else {
-        const { name, ...teacherInfo } = teacherData;
-        teacherInfo["userId"] = userId;
-        const { data } = await axios.post(`/api/teachers/create`, {
-          ...teacherInfo,
-        });
-        console.log(data);
-      }
-      console.log("Teacher saved...");
-    } catch (e) {
-      console.log("Error occured during user info saved... ", e);
-    }
-    setSubmitting(false);
-  };
-
-  function extraValidate() {
-    const errors = {} as any;
-    return errors;
-  }
-
-  return (
-    <>
-      <Typography variant="h5" sx={{ marginTop: "20px" }}>
-        Teacher Info
-      </Typography>
-      <formik.Formik
-        initialValues={{
-          ...teacher,
-        }}
-        validationSchema={TeacherInfoSchema}
-        validate={extraValidate}
-        onSubmit={saveTeacherInfo}
-      >
-        <TeacherInfoForm />
-      </formik.Formik>
-    </>
-  );
-};
-
-const StudentInfoSchema = Yup.object().shape({
-  // id: Yup.string().required("Required"),
-  registrationNo: Yup.string().required("Required"),
-  session: Yup.string().required("Required"),
-});
-
-const StudentInfoForm = () => {
-  const { isSubmitting, values, setFieldValue, isValid } =
-    formik.useFormikContext() as any;
-  return (
-    <formik.Form>
-      {/* <widgets.TextField
-        name="id"
-        label="Id"
-        fullWidth={true}
-        disabled={true}
-      /> */}
-      <widgets.TextField
-        name="registrationNo"
-        label="Registration No"
-        fullWidth={true}
-      />
-      <widgets.TextField name="session" label="Session" fullWidth={true} />
-
-      <br />
-      <Button
-        disabled={isSubmitting || !isValid}
-        label="Save"
-        variant="contained"
-        type="submit"
-        size="large"
-        style={{ margin: "10px" }}
-      />
-    </formik.Form>
-  );
-};
-
-const StudentInfoPromt = ({
-  student,
-  createNew,
-  userId,
-}: {
-  student: StudentInfo;
-  userId: string | number;
-  createNew?: boolean;
-}) => {
-  const initialValues = student;
-
-  const { query } = useRouter();
-
-  const saveStudentInfo = async (
-    studentData: Student,
-    { setSubmitting }: any
-  ) => {
-    try {
-      console.log(studentData);
-      if (!createNew) {
-        const { name, ...studentInfo } = studentData;
-        const { data } = await axios.post(`/api/students/update-info`, {
-          ...studentInfo,
-        });
-        console.log(data);
-      } else {
-        const { name, ...studentInfo } = studentData;
-        studentInfo["userId"] = userId;
-        const { data } = await axios.post(`/api/students/create`, {
-          ...studentInfo,
-        });
-        console.log(data);
-      }
-      console.log("Student saved...");
-    } catch (e) {
-      console.log("Error occured during user info saved... ", e);
-    }
-    setSubmitting(false);
-  };
-
-  function extraValidate() {
-    const errors = {} as any;
-    return errors;
-  }
-
-  return (
-    <>
-      <Typography variant="h5" sx={{ marginTop: "20px" }}>
-        Student Info
-      </Typography>
-      <formik.Formik
-        initialValues={{
-          ...student,
-        }}
-        validationSchema={StudentInfoSchema}
-        validate={extraValidate}
-        onSubmit={saveStudentInfo}
-      >
-        <StudentInfoForm />
-      </formik.Formik>
-    </>
-  );
-};
-
 const UserInfoSchema = Yup.object().shape({
-  id: Yup.string().required("Required"),
   name: Yup.string().required("Required"),
   email: Yup.string().required("Required"),
-  contactNo: Yup.string().required("Required"),
-  department: Yup.string().required("Required"),
-  avatarURL: Yup.string(),
 });
 
 const UserInfoForm = () => {
@@ -239,21 +48,19 @@ const UserInfoForm = () => {
     formik.useFormikContext() as any;
   return (
     <formik.Form>
-      {/* <widgets.TextField
-        name="id"
-        label="Id"
-        fullWidth={true}
-        disabled={true}
-      /> */}
       <widgets.TextField name="name" label="Name" fullWidth={true} />
-      <widgets.TextField name="email" label="Email" fullWidth={true} />
+      <widgets.TextField disabled name="email" label="Email" fullWidth={true} />
       <widgets.TextField name="contactNo" label="ContactNo" fullWidth={true} />
+
       <widgets.TextField
-        name="department"
-        label="Department"
+        name="accountName"
+        label="Account name"
         fullWidth={true}
       />
-      <widgets.TextField name="avatarURL" label="AvatarURL" fullWidth={true} />
+
+      <widgets.TextField name="accountNo" label="Account No" fullWidth={true} />
+
+      <widgets.TextField name="secret" label="Secret" fullWidth={true} />
 
       <br />
       <Button
@@ -268,24 +75,47 @@ const UserInfoForm = () => {
   );
 };
 
-const UserInfoPromt = ({ user }: { user: UserInfo }) => {
-  const initialValues = user;
-
+const UserInfoPromt = ({ user: _user }: { user: User }) => {
+  const { user, updateUser } = useUser();
   const { query } = useRouter();
   const projectId = query.projectId as string;
 
   const saveUserInfo = async (userData: User, { setSubmitting }: any) => {
     try {
       console.log(userData);
-      const { data } = await axios.post(`/api/users/update-info`, {
+      const { data } = await axios.post(`/api/users/email/${user?.email}`, {
         ...userData,
       });
-      console.log(data);
-      console.log("User saved...");
+      console.log({ data });
+      if (data && data?.accountInfo) {
+        updateUser({
+          ...user,
+          ...data?.accountInfo,
+        });
+        console.log("User saved...");
+        setOpen(true);
+      }
     } catch (e) {
       console.log("Error occured during user info saved... ", e);
     }
     setSubmitting(false);
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   function extraValidate() {
@@ -300,7 +130,7 @@ const UserInfoPromt = ({ user }: { user: UserInfo }) => {
       </Typography>
       <formik.Formik
         initialValues={{
-          ...user,
+          ...(user as User),
         }}
         validationSchema={UserInfoSchema}
         validate={extraValidate}
@@ -308,155 +138,11 @@ const UserInfoPromt = ({ user }: { user: UserInfo }) => {
       >
         <UserInfoForm />
       </formik.Formik>
-    </>
-  );
-};
-
-export const StudentAlignment = {
-  INFO: "info",
-  PROJECTS: "projects",
-  COURSES: "courses",
-};
-
-const StudentProfile = ({
-  student,
-  userId,
-}: {
-  student: Student;
-  userId: string | number;
-}) => {
-  const [alignment, setAlignment] = useState<string>(StudentAlignment.INFO);
-  const { projects, courses, ...info } = student;
-  const [studentInfo, setStudentInfo] = useState<StudentInfo>(info);
-
-  const updateInfo = (newInfo: StudentInfo) => {
-    setStudentInfo(newInfo);
-  };
-  const handleChange = (
-    event: any,
-    newAlignment: React.SetStateAction<string>
-  ) => {
-    setAlignment(newAlignment);
-  };
-  return (
-    <>
-      <Box className="project-heading" sx={{ mb: 4, mt: 15 }}>
-        <ToggleButtonGroup
-          color="primary"
-          value={alignment}
-          exclusive
-          onChange={handleChange}
-          sx={{ width: "100%", justifyContent: "center" }}
-        >
-          <ToggleButton value={StudentAlignment.INFO}>Info</ToggleButton>
-          <ToggleButton value={StudentAlignment.COURSES}>Courses</ToggleButton>
-          <ToggleButton value={StudentAlignment.PROJECTS}>
-            Projects
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
-      {alignment === StudentAlignment.INFO && (
-        <>
-          {student && (
-            <ShortPageForm>
-              <StudentInfoPromt
-                student={studentInfo as StudentInfo}
-                userId={userId}
-              />
-            </ShortPageForm>
-          )}
-        </>
-      )}
-      {alignment === StudentAlignment.COURSES && (
-        <>
-          {courses && courses.length > 0 && (
-            <CourseList courses={courses} title={"All Courses"} />
-          )}
-        </>
-      )}
-      {alignment === StudentAlignment.PROJECTS && (
-        <>
-          {projects && projects.length > 0 && (
-            <ProjectList title={"All Projects"} projects={projects} />
-          )}
-        </>
-      )}
-    </>
-  );
-};
-
-export const TeacherAlignment = {
-  INFO: "info",
-  PROJECTS: "projects",
-  COURSES: "courses",
-};
-const TeacherProfile = ({
-  teacher,
-  userId,
-}: {
-  teacher: Teacher;
-  userId: string;
-}) => {
-  const [alignment, setAlignment] = useState<string>(TeacherAlignment.INFO);
-  const { courses, ...info } = teacher;
-  const projects = courses
-    ?.map((course: Course) => course.projects)
-    .reduce((a, b) => a?.concat(b ?? []));
-
-  const [teacherInfo, setTeacherInfo] = useState<TeacherInfo>(info);
-
-  const updateInfo = (newInfo: TeacherInfo) => {
-    setTeacherInfo(newInfo);
-  };
-  const handleChange = (
-    event: any,
-    newAlignment: React.SetStateAction<string>
-  ) => {
-    setAlignment(newAlignment);
-  };
-  return (
-    <>
-      <Box className="project-heading" sx={{ mb: 4, mt: 15 }}>
-        <ToggleButtonGroup
-          color="primary"
-          value={alignment}
-          exclusive
-          onChange={handleChange}
-          sx={{ width: "100%", justifyContent: "center" }}
-        >
-          <ToggleButton value={TeacherAlignment.INFO}>Info</ToggleButton>
-          <ToggleButton value={TeacherAlignment.COURSES}>Courses</ToggleButton>
-          <ToggleButton value={TeacherAlignment.PROJECTS}>
-            Projects
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
-      {alignment === TeacherAlignment.INFO && (
-        <>
-          {teacher && (
-            <ShortPageForm>
-              <TeacherInfoPromt
-                teacher={teacherInfo as TeacherInfo}
-                userId={userId}
-              />
-            </ShortPageForm>
-          )}
-        </>
-      )}
-      {alignment === TeacherAlignment.COURSES && (
-        <>
-          {courses && courses.length > 0 && (
-            <CourseList courses={courses} title={"All Courses"} />
-          )}
-        </>
-      )}
-      {alignment === TeacherAlignment.PROJECTS && (
-        <>
-          {projects && projects.length > 0 && (
-            <ProjectList title={"All Projects"} projects={projects} />
-          )}
-        </>
-      )}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          User updated successfully!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
@@ -464,77 +150,19 @@ const TeacherProfile = ({
 const UserProfile = () => {
   const { user, updateUser } = useUser();
   const { query } = useRouter();
-  const userId = query.userId as string;
-  const [type, setType] = useState(true);
-  const [studentChecked, setStudentChecked] = useState(false);
-  const [teacherChecked, setTeacherChecked] = useState(false);
+
   if (!user) {
     return <></>;
   }
-  const { student, teacher, ...userInfo } = user as User;
-
-  const handleStudentCheckbox = (isStudent: boolean) => {
-    isStudent
-      ? setStudentChecked(!studentChecked)
-      : setTeacherChecked(!teacherChecked);
-  };
 
   return (
     <>
       <Container sx={{ maxWidth: "800px", margin: "auto" }}>
         <ShortPageForm>
-          <UserInfoPromt user={userInfo as UserInfo} />
+          <UserInfoPromt user={user as User} />
         </ShortPageForm>
 
-        {student && <StudentProfile student={student} userId={userId} />}
-        {teacher && <TeacherProfile teacher={teacher} userId={userId} />}
-
-        <Box sx={{ margin: 5 }}>
-          {!student && (
-            <>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={studentChecked}
-                      onChange={() => handleStudentCheckbox(true)}
-                    />
-                  }
-                  label="Register as a student"
-                />
-              </FormGroup>
-              {studentChecked && (
-                <StudentInfoPromt
-                  student={student as unknown as Student}
-                  userId={userId}
-                  createNew={true}
-                />
-              )}
-            </>
-          )}
-          {!teacher && (
-            <>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={teacherChecked}
-                      onChange={() => handleStudentCheckbox(false)}
-                    />
-                  }
-                  label="Register as a teacher"
-                />
-              </FormGroup>
-              {teacherChecked && (
-                <TeacherInfoPromt
-                  teacher={teacher as unknown as Teacher}
-                  userId={userId}
-                  createNew={true}
-                />
-              )}
-            </>
-          )}
-        </Box>
+        <Box sx={{ margin: 5 }}></Box>
       </Container>
     </>
   );
@@ -549,9 +177,3 @@ const UserPage = () => {
 };
 
 export default UserPage;
-function initialValues(
-  initialValues: any,
-  arg1: { name: string; email: string }
-) {
-  throw new Error("Function not implemented.");
-}

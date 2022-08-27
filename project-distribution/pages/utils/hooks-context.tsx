@@ -1,18 +1,14 @@
 import { createContext, useContext, useState } from "react";
-import { Course, Project, User } from "../types/utils";
+import { Address, Course, Project, User } from "../types/utils";
 
 interface UserContextType {
   user: User | null;
   updateUser: (newUser: User) => void;
-  getProjects: () => Project[];
-  getCourses: () => Course[];
 }
 
 const UserContextDefaultValue: UserContextType = {
   user: null,
   updateUser: (newUser: User) => {},
-  getProjects: () => [],
-  getCourses: () => [],
 };
 
 export const UserContext = createContext<UserContextType>(
@@ -26,24 +22,8 @@ export const UserProvider = ({ children }: { children: any }) => {
     setUser(() => newUser);
   };
 
-  const getProjects = (): Project[] => {
-    if (!user || !user.student) {
-      return [];
-    }
-    return user.student.projects ?? [];
-  };
-  const getCourses = (): Course[] => {
-    if (!user || !user.teacher) {
-      return [];
-    }
-    const coursesAsTeacher = user.teacher.courses ?? [];
-    const coursesAsStudent = user.student?.courses ?? [];
-    return [...coursesAsStudent, ...coursesAsTeacher];
-    // return user.teacher.courses ?? [];
-  };
-
   return (
-    <UserContext.Provider value={{ user, updateUser, getProjects, getCourses }}>
+    <UserContext.Provider value={{ user, updateUser }}>
       {children}
     </UserContext.Provider>
   );
@@ -52,3 +32,37 @@ export const UserProvider = ({ children }: { children: any }) => {
 export const useUser = () => {
   return useContext(UserContext);
 };
+
+// address
+
+// interface AddressContextType {
+//   address: Address | null;
+//   updateAddress: (newAddress: Address) => void;
+// }
+
+// const AddressContextDefaultValue: AddressContextType = {
+//   address: null,
+//   updateAddress: (newAddress: Address) => {},
+// };
+
+// export const AddressContext = createContext<AddressContextType>(
+//   AddressContextDefaultValue
+// );
+
+// export const AddressProvider = ({ children }: { children: any }) => {
+//   const [address, setAddress] = useState<Address | null>(null);
+
+//   const updateAddress = (newAddress: Address) => {
+//     setAddress(() => newAddress);
+//   };
+
+//   return (
+//     <AddressContext.Provider value={{ address, updateAddress }}>
+//       {children}
+//     </AddressContext.Provider>
+//   );
+// };
+
+// export const useAddress = () => {
+//   return useContext(AddressContext);
+// };
