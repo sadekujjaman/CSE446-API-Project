@@ -59,7 +59,12 @@ const UserInfoForm = () => {
       />
 
       <widgets.TextField name="accountNo" label="Account No" fullWidth={true} />
-
+      <widgets.TextField
+        disabled
+        name="balance"
+        label="Current balance"
+        fullWidth={true}
+      />
       <widgets.TextField name="secret" label="Secret" fullWidth={true} />
 
       <br />

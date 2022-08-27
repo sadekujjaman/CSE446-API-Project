@@ -1,6 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { Address, Course, Project, User } from "../types/utils";
 
+const ECOMERCE_DOMAIN = "recruit";
+const SUPPLIER_DOMAIN = "prism";
+
 interface UserContextType {
   user: User | null;
   updateUser: (newUser: User) => void;
@@ -21,7 +24,7 @@ export const UserProvider = ({ children }: { children: any }) => {
   const updateUser = (newUser: User) => {
     setUser(() => {
       const { email } = newUser;
-      if (email && email.includes("saju")) {
+      if (email && email.includes(SUPPLIER_DOMAIN)) {
         newUser["isSupllier"] = true;
       }
       return newUser;

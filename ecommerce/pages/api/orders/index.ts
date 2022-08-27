@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase } from "../../utils/mongodb";
 
 const ECOMMERCE_ACCOUNT_NO = "909090";
 const SUPPLIER_ACCOUNT_NO = "808080";
@@ -10,9 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { database } = await connectToDatabase();
-  const collection = database.collection("orders");
-
   if (req.method === "POST") {
     try {
       const { user, products, address, amount: _amount } = req.body;

@@ -20,7 +20,8 @@ export type UserInfo = {
 export type User = {
   accountName?: string;
   accountNo?: string;
-  secret?: number;
+  secret?: string;
+  balance?: number;
   isSupllier?: boolean;
 } & UserInfo;
 
