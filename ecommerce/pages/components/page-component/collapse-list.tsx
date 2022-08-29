@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Link as MuiLink } from "../../components/widgets";
+import { Link as MuiLink } from "../widgets";
 
 export interface CollapsibleListItem {
   title: string;

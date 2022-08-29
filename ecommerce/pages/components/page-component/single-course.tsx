@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Course } from "../../types/utils";
-import { WrapperPage } from "../../components/page-component/page-wrapper";
+import { WrapperPage } from "./page-wrapper";
 import Link from "next/link";
 import Box from "@mui/material/Box";
-import { Link as MuiLink, Typography } from "../../components/widgets";
+import { Link as MuiLink, Typography } from "../widgets";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
@@ -20,11 +20,11 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { Row } from "../../components/layout/row";
-import { Col } from "../../components/layout/col";
-import ImageCard from "../../components/common/card/image-card";
-import { modalStyle } from "../../components/page-component/commons";
-import * as widgets from "../../components/widgets";
+import { Row } from "../layout/row";
+import { Col } from "../layout/col";
+import ImageCard from "../common/card/image-card";
+import { modalStyle } from "./commons";
+import * as widgets from "../widgets";
 import { MultiLineTruncate } from "../layout/dashboard-wrapper";
 
 export const authorsNormalized = (authors: Array<string>): string =>

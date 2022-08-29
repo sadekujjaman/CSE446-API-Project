@@ -2,10 +2,10 @@ import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { AutoCompleteData, Product, Project } from "../../types/utils";
-import { WrapperPage } from "../../components/page-component/page-wrapper";
+import { WrapperPage } from "./page-wrapper";
 import Link from "next/link";
 import Box from "@mui/material/Box";
-import { Link as MuiLink, Typography } from "../../components/widgets";
+import { Link as MuiLink, Typography } from "../widgets";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
@@ -20,10 +20,10 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { Row } from "../../components/layout/row";
-import { Col } from "../../components/layout/col";
-import { modalStyle } from "../../components/page-component/commons";
-import * as widgets from "../../components/widgets";
+import { Row } from "../layout/row";
+import { Col } from "../layout/col";
+import { modalStyle } from "./commons";
+import * as widgets from "../widgets";
 import { SingleProject } from "./single-project";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { SingleProduct } from "./single-product";

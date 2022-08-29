@@ -9,7 +9,7 @@ import {
 } from "../../layout/dashboard-wrapper";
 import { Badge } from "../../widgets";
 import { Card, CardProps } from "./card";
-import { Link as MuiLink } from "../../../components/widgets";
+import { Link as MuiLink } from "../../widgets";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import Link from "next/link";
