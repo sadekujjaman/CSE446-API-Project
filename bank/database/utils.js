@@ -34,7 +34,7 @@ async function withdraw(accountNo, balance) {
 async function postTransaction(senderAccount, receiverAccount, balance) {
   const senderAccountNo = senderAccount.accountNo;
   const receiverAccountNo = receiverAccount.accountNo;
-  const max = 999999999;
+  const max = 100;
   const randomNumber = parseInt(Math.floor(Math.random() * max));
   const transactionId = `${Date.now()}${randomNumber}`;
   const transaction = new Transaction({

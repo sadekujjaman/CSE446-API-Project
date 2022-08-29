@@ -92,6 +92,32 @@ app.post(`${apiUrl}/createOrder`, urlencodedParser, (req, res) => {
   });
 });
 
+app.post(
+  `${apiUrl}/order/updateOrderStatus`,
+  urlencodedParser,
+  async (req, res) => {
+    try {
+      const { orderId, updatedStatus } = req.body;
+      console.log({ orderId });
+      const order = await Order.find({ orderId });
+      console.log({ order });
+      const newOrderData = { ...order, status: updatedStatus };
+      console.log({ newOrderData });
+      if (updatedStatus === "delivered") {
+        newOrderData["deliveredAt"] = new Date().toISOString();
+      }
+      await Order.updateOne(
+        { orderId },
+        { $set: { ...newOrderData } },
+        { upsert: true }
+      );
+      return res.status(200).json({ status: "Ok" });
+    } catch (err) {
+      return res.status(500).json({ error: "Error Occurred!" });
+    }
+  }
+);
+
 app.get(`${apiUrl}/orders`, urlencodedParser, (req, res) => {
   Order.find({}, (err, orders) => {
     if (err) {

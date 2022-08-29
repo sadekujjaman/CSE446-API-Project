@@ -19,7 +19,13 @@ export const UserProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const updateUser = (newUser: User) => {
-    setUser(() => newUser);
+    setUser(() => {
+      const { email } = newUser;
+      if (email && email.includes("saju")) {
+        newUser["isSupllier"] = true;
+      }
+      return newUser;
+    });
   };
 
   return (

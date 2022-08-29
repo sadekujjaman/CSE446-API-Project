@@ -21,6 +21,7 @@ export type User = {
   accountName?: string;
   accountNo?: string;
   secret?: number;
+  isSupllier?: boolean;
 } & UserInfo;
 
 export type Address = {
@@ -31,11 +32,14 @@ export type Address = {
 };
 
 export type Order = {
-  id?: string;
+  orderId?: string;
   address?: Address;
   products?: { count: number; product: Product }[];
   transactionId: string;
   amount: number;
+  status?: string;
+  orderAt?: Date;
+  deliveredAt?: Date;
 };
 
 export type StudentInfo = {

@@ -2,7 +2,12 @@ import { AddBox, DeleteOutline } from "@mui/icons-material";
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -22,67 +27,164 @@ import Link from "next/link";
 import { ShortPageForm } from "./components/layout/dashboard-wrapper";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useUser } from "./utils/hooks-context";
 
 const OrderDashboard = () => {
   const [orders, setOrders] = useState<Order[]>();
+  const { user } = useUser();
+
+  const fetchOrders = async () => {
+    const { data } = await axios.get("/api/orders");
+    console.log({ data });
+    setOrders(data.orders);
+  };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const { data } = await axios.get("/api/orders");
-      console.log({ data });
-      setOrders(data.orders);
-    };
     fetchOrders();
   }, []);
 
-  const simplyfiProductNames = (order) => {
+  const simplyfiProductNames = (order: Order) => {
     console.log({ order });
-    const names = order.products.map(
+    const names = (order?.products || []).map(
       ({ count, product }) => `${product.name} - ${count}x`
     );
     return names.join(",");
   };
-  const simplyfiAddress = (order) => {
+  const simplyfiAddress = (order: Order) => {
     console.log({ order });
-    const address = `${order.address.city}, ${order.address.area}, ${order.address.houseNo}, ${order.address.phone}`;
-    return address;
+    const { address } = order || {};
+    const addressStr = `${address?.city}, ${address?.area}, ${address?.houseNo}, ${address?.phone}`;
+    return addressStr;
+  };
+
+  const handleChange = async (event: SelectChangeEvent, order: Order) => {
+    // setAge(event.target.value as string);
+    const updatedStatus = event.target.value as string;
+    const { data } = await axios.post("/api/orders/updateStatus", {
+      orderId: order.orderId,
+      updatedStatus,
+    });
+    if (data?.status === "Ok") {
+      //   setOrders((prevOrders) => {
+      //     const newOrders = prevOrders?.map((o) => {
+      //       const updatedOrder = { ...o };
+      //       if (o.orderId === order.orderId) {
+      //         updatedOrder.status = updatedStatus;
+      //       }
+      //       return updatedOrder;
+      //     });
+      //     return newOrders;
+      //   });
+      await fetchOrders();
+    }
+  };
+
+  const orderStatus = [
+    { name: "Pending", value: "pending" },
+    { name: "Accepted", value: "accepted" },
+    { name: "Delivered", value: "delivered" },
+    { name: "Canceled", value: "canceled" },
+  ];
+
+  const getStatusByValue = (value: string) => {
+    return orderStatus.filter((s) => s.value === value)[0].name;
   };
 
   return (
     <Box>
       {orders && orders.length > 0 && (
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Order Id</TableCell>
-              <TableCell>Products</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Order time</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Delivered time</TableCell>
-              <TableCell>TransactionId</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell sx={{ textDecoration: "underline" }}>
-                  {order?.orderId}
+        <>
+          <Typography variant="h6" align="center">
+            Your Orders
+          </Typography>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Order Id
                 </TableCell>
-                <TableCell>{simplyfiProductNames(order)}</TableCell>
-                <TableCell>{simplyfiAddress(order)}</TableCell>
-                <TableCell>{order.amount}</TableCell>
-                <TableCell>{order.orderAt}</TableCell>
-                <TableCell>{order.status}</TableCell>
-                <TableCell>
-                  {order.status === "delivered" ? order.deliveredAt : "-"}
+                <TableCell style={{ width: "12%" }} align="center">
+                  Products
                 </TableCell>
-                <TableCell>{order.transactionId}</TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Address
+                </TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Amount
+                </TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Order time
+                </TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Status
+                </TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  Delivered time
+                </TableCell>
+                <TableCell style={{ width: "12%" }} align="center">
+                  TransactionId
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow key={order.orderId}>
+                  <TableCell
+                    style={{ width: "12%" }}
+                    align="center"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    {order?.orderId}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {simplyfiProductNames(order)}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {simplyfiAddress(order)}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {order.amount}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {order.orderAt}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {user?.isSupllier ? (
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          Status
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={order.status}
+                          label="Status"
+                          onChange={(e) => handleChange(e, order)}
+                        >
+                          {/* <MenuItem value={10}>Ten</MenuItem>
+                     <MenuItem value={20}>Twenty</MenuItem>
+                     <MenuItem value={30}>Thirty</MenuItem> */}
+                          {orderStatus.map((s) => (
+                            <MenuItem value={s.value}>{s.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    ) : (
+                      <>{getStatusByValue(order.status as string)}</>
+                    )}
+                  </TableCell>
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {order.status === "delivered" ? order.deliveredAt : "-"}
+                  </TableCell>
+
+                  <TableCell style={{ width: "12%" }} align="center">
+                    {order.transactionId}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
       )}
       {!orders ||
         (orders.length === 0 && (
