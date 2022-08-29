@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { useUser } from "../../utils/hooks-context";
 import { useCart } from "../../hooks/cart";
+import NextImage from "next/image";
 
 const Navbar = styled.div`
   width: 100%;
@@ -69,6 +70,17 @@ const Navbar = styled.div`
   }
 `;
 
+// const Image = (props) => {
+//   if (props.src) {
+//     return <NextImage {...props} />;
+//   }
+
+//   //TODO: if the image source is not there, you can set a default source
+//   const defaultSrc = "something";
+
+//   return <img {...props} src={defaultSrc} />;
+// };
+
 export const Nav = ({
   session,
   loading,
@@ -80,6 +92,7 @@ export const Nav = ({
   handleModalOpen: () => void;
   handleModalClose: () => void;
 }) => {
+  console.log({ session });
   const { user, updateUser } = useUser();
   const { products, addProduct, deleteProduct } = useCart();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -134,13 +147,6 @@ export const Nav = ({
             </button>
           </Link>
         </div>
-        {!session && !loading && (
-          <div className="navbar__item">
-            <button className="navbar__link" onClick={() => signIn()}>
-              Login
-            </button>
-          </div>
-        )}
         <div className="navbar__item">
           <Link
             href={{
@@ -156,6 +162,13 @@ export const Nav = ({
             </IconButton>
           </Link>
         </div>
+        {!session && !loading && (
+          <div className="navbar__item">
+            <button className="navbar__link" onClick={() => signIn()}>
+              Login
+            </button>
+          </div>
+        )}
 
         {session && !loading && (
           <>
@@ -218,10 +231,16 @@ export const Nav = ({
                         }}
                       >
                         <MuiAvatar
-                          alt="Remy Sharp"
+                          // alt="Remy Sharp"
                           src={session.user.image}
                           sx={{ width: 56, height: 56 }}
                         />
+                        {/* <Image
+                          src={session.user.image}
+                          width="96"
+                          height="96"
+                          alt="profile avatar"
+                        /> */}
                         <Typography variant="body1">
                           {session.user.name}
                         </Typography>
@@ -240,12 +259,16 @@ export const Nav = ({
                           background: "#efefef",
                         }}
                       >
-                        <Button className="navbar__link">My Orders</Button>
                         <Button className="navbar__link">
+                          <Link passHref href={{ pathname: "/orders" }}>
+                            My Orders
+                          </Link>
+                        </Button>
+                        {/* <Button className="navbar__link">
                           <Link passHref href={{ pathname: "/courses/create" }}>
                             My Reviews
                           </Link>
-                        </Button>
+                        </Button> */}
                         <Button className="navbar__link">
                           <Link
                             passHref

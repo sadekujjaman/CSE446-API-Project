@@ -30,6 +30,14 @@ export type Address = {
   phone?: string;
 };
 
+export type Order = {
+  id?: string;
+  address?: Address;
+  products?: { count: number; product: Product }[];
+  transactionId: string;
+  amount: number;
+};
+
 export type StudentInfo = {
   id: string | number;
   userId: string | number; // userId
@@ -56,7 +64,7 @@ export type ProjectInfo = {
   team?: string | number; // team id
 };
 
-export type ProductInfo = {
+export type Product = {
   id: string | number;
   _id?: string | number;
   supplierId?: string | number; // supplier id
@@ -71,11 +79,6 @@ export type Project = {
   teamInfo?: TeamInfo;
   reviews?: Review[]; // reviews id
 } & ProjectInfo;
-
-export type Product = {
-  supplierInfo?: SupplierInfo;
-  reviews?: Review[]; // reviews id
-} & ProductInfo;
 
 export interface Review {
   id: number | string;

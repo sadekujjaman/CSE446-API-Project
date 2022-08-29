@@ -69,18 +69,40 @@ app.post(`${apiUrl}/addProduct`, urlencodedParser, (req, res) => {
 
 app.post(`${apiUrl}/createOrder`, urlencodedParser, (req, res) => {
   const { products, address, transactionId, amount } = req.body;
+  const max = 10;
+  const randomNumber = parseInt(Math.floor(Math.random() * max));
+  const dateStr = String(Date.now());
+  const pref = dateStr.substring(7);
+  const orderId = `${pref}${randomNumber}`;
 
   const order = new Order({
     products,
     address,
     transactionId,
     amount,
+    status: "pending",
+    orderAt: new Date().toISOString(),
+    orderId,
   });
   order.save(function (err) {
     if (err) {
       return res.send("Error occurred, order creation failed. try again!");
     }
     res.send("Order created successfully!");
+  });
+});
+
+app.get(`${apiUrl}/orders`, urlencodedParser, (req, res) => {
+  Order.find({}, (err, orders) => {
+    if (err) {
+      return res.json({ error: "Error occurred during fetching orders" });
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    return res.json({ orders });
   });
 });
 

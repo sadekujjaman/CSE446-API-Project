@@ -102,7 +102,10 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
   const handleModalOpen = () => {
     setModalOpen(true);
   };
-  const handleModalClose = () => setModalOpen(false);
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setModalErrorMessage(null);
+  };
   const accountNameRef = useRef(""); //creating a refernce for TextField Component
   const accountNoRef = useRef(""); //creating a refernce for TextField Component
   const secretRef = useRef(""); //creating a refernce for TextField Component
@@ -290,7 +293,7 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                 </Button>
               </Box>
             </Modal>
-            <div style={{ marginTop: "500px" }}></div>
+            <div style={{ marginTop: "400px" }}></div>
             <Footer />
           </PageWrapper>
         </Box>

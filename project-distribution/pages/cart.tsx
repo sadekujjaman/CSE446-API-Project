@@ -19,6 +19,7 @@ import { getTotalPrice, useCart } from "./hooks/cart";
 import { Typography } from "./components/widgets";
 import { Product } from "./types/utils";
 import Link from "next/link";
+import { ShortPageForm } from "./components/layout/dashboard-wrapper";
 
 const CartDashboard = () => {
   const { products, addProduct, deleteProduct } = useCart();
@@ -126,7 +127,7 @@ const CartDashboard = () => {
       )}
       {!products ||
         (products.length === 0 && (
-          <>
+          <ShortPageForm>
             <Typography variant="h4">Your cart is empty!</Typography>
             <MuiLink underline="hover" sx={{ cursor: "pointer" }}>
               <Typography variant="h5">
@@ -135,7 +136,7 @@ const CartDashboard = () => {
                 </Link>
               </Typography>
             </MuiLink>
-          </>
+          </ShortPageForm>
         ))}
     </Box>
   );
@@ -143,9 +144,7 @@ const CartDashboard = () => {
 const Home = () => {
   return (
     <>
-      <WrapperPage title="Project Profile">
-        {() => <CartDashboard />}
-      </WrapperPage>
+      <WrapperPage title="Your Cart">{() => <CartDashboard />}</WrapperPage>
     </>
   );
 };
