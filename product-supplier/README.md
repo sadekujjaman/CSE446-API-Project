@@ -83,7 +83,7 @@ To create a new product, open Postman app and set your request type POST and put
 }
 ```
 
-Then click send and you should see `Product saved successfully!` as a response.
+Then click send and you should see `Product saved successfully!` as response.
 
 ![Product Creation](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/images/add-product.png)
 
@@ -91,4 +91,6 @@ After adding a new product, fetch all the products to see details:
 
 ### Fetch all the products
 
-### Fetch a specific product
+To fetch all the products, open Postman app and set your request type GET and put this URL `http://localhost:4000/api/v1/products`. Then click send and you should see a list of products as response.
+
+![Producs](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/images/fetch-products.png)
