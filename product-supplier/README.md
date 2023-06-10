@@ -85,7 +85,7 @@ To create a new product, open Postman app and set your request type POST and put
 
 Then click send and you should see `Product saved successfully!` as a response.
 
-[Product Creation](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/images/add-product.png)
+![Product Creation](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/images/add-product.png)
 
 After adding a new product, fetch all the products to see details:
 
