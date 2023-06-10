@@ -14,7 +14,7 @@ This is a [NodeJS](https://nodejs.org/en) project bootstrapped with [`node`](htt
 
 ### Software Requirements
 
-1. ![MongoDB](https://www.mongodb.com/): A NoSQL database used for storing data
+1. [MongoDB](https://www.mongodb.com/): A NoSQL database used for storing data
 
 ### Setup
 
@@ -56,9 +56,9 @@ To set the step by step setup for MongoDB, visit ![MongoDB Setup](abc)
 
 To get more info:
 
-1. ![NodeJS Quick Start](https://nodejs.dev/en/learn/)
-2. ![Mongodb Atlas Quick Start](https://www.mongodb.com/docs/atlas/getting-started/)
-3. ![Mongodb](https://www.mongodb.com/docs/drivers/node/current/)
+1. [NodeJS Quick Start](https://nodejs.dev/en/learn/)
+2. [Mongodb Atlas Quick Start](https://www.mongodb.com/docs/atlas/getting-started/)
+3. [Mongodb](https://www.mongodb.com/docs/drivers/node/current/)
 
 API routes can be accessed on [http://localhost:4000/api/v1/](http://localhost:4000/api/v1/). Those endpoints are available in `index.js`.
 
