@@ -8,6 +8,7 @@ const { Product, Order } = require("./database/models");
 var upload = multer();
 var app = express();
 const apiUrl = "/api/v1";
+const port = 4000;
 
 // for parsing application/json
 app.use(bodyParser.json());
@@ -15,11 +16,11 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 app.use(upload.array());
 
 app.get("", (req, res) => {
-  return res.sendFile(path.join(__dirname + "/index.html"));
+  return res.send(`Your server is running on port ${port}!`);
 });
 
-app.get(`/products`, (req, res) => {
-  res.sendFile(path.join(__dirname + "/products.html"));
+app.get(`${apiUrl}`, (req, res) => {
+  return res.send(`Your server is running on port ${port}!`);
 });
 
 app.get(`${apiUrl}/products`, (req, res) => {
@@ -132,4 +133,4 @@ app.get(`${apiUrl}/orders`, urlencodedParser, (req, res) => {
   });
 });
 
-app.listen(4000);
+app.listen(port);
