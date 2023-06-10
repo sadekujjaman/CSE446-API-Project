@@ -8,8 +8,8 @@ This is a [NodeJS](https://nodejs.org/en) project bootstrapped with [`node`](htt
 
 ### System Requirements
 
-1. ![Node.js](https://nodejs.org/en/) 12.22.0 or later
-2. ![NPM](https://www.npmjs.com/) or ![Yarn](https://yarnpkg.com/)
+1. [Node.js](https://nodejs.org/en/) 12.22.0 or later
+2. [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
 3. MacOS, Windows (including WSL), and Linux are supported
 
 ### Software Requirements
