@@ -40,7 +40,7 @@ yarn dev
 npm run start
 ```
 
-Open [http://localhost:4000](http://localhost:4000) with your browser to see your server is running on port 4000..
+Open [http://localhost:4000](http://localhost:4000) with your browser to see `Your server is running on port 4000!`..
 
 ### FAQ
 
@@ -48,8 +48,10 @@ To work with this project one must have prepare a environment file with followin
 The file name should be `.env` and must contain in the `product-supplier` directory.
 
 ```
-MONGODB_URI=MONGODB_URI_NAME
+MONGODB_URI=mongodb+srv://<username>:<password>@graphql-demo.cew73.mongodb.net/product-supplier?retryWrites=true&w=majority
 ```
+
+\*\*\* Replace `<username>` and `<password>` with your mongodb username and password respectfully.
 
 You can get this `MONGODB_URI` from your mongodb atlas account. [Mongodb Atlas/](https://cloud.mongodb.com/).
 To set the step by step setup for MongoDB, visit [MongoDB Setup](https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier/mongodb-setup)
@@ -70,7 +72,22 @@ Here are some basic API routes:
 
 ### Create a new product
 
-To create a new product, open Postman app and
+To create a new product, open Postman app and set your request type POST and put this URL `http://localhost:4000/api/v1/addProduct`. In the request body, provide a JSON object with following properties:
+
+```bash
+{
+    "name": "Product Name",
+    "category": "Category Name",
+    "price": 100,
+    "description": "Description goes here"
+}
+```
+
+Then click send and you should see `Product saved successfully!` as a response.
+
+[Product Creation](https://github.com/sadekujjaman/studious-journey/blob/main/images/Screenshot%20from%202021-12-14%2013-10-42.png)
+
+After adding a new product, fetch all the products to see details:
 
 ### Fetch all the products
 
