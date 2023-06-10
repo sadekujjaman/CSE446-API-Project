@@ -51,8 +51,8 @@ The file name should be `.env` and must contain in the `product-supplier` direct
 MONGODB_URI=MONGODB_URI_NAME
 ```
 
-You can get this `MONGODB_URI` from your mongodb atlas account. ![Mongodb Atlas/](https://cloud.mongodb.com/).
-To set the step by step setup for MongoDB, visit ![MongoDB Setup](abc)
+You can get this `MONGODB_URI` from your mongodb atlas account. [Mongodb Atlas/](https://cloud.mongodb.com/).
+To set the step by step setup for MongoDB, visit [MongoDB Setup](https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier/mongodb-setup)
 
 To get more info:
 
