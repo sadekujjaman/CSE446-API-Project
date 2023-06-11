@@ -9,6 +9,7 @@ const { deposit, withdraw, makeTransaction } = require("./database/utils");
 var upload = multer();
 var app = express();
 const apiUrl = "/api/v1";
+const port = 4002;
 
 // for parsing application/json
 app.use(bodyParser.json());
@@ -17,8 +18,15 @@ app.use(upload.array());
 
 const Account = models.Account;
 
+app.get("", (req, res) => {
+  return res.send(`Your bank server is running on port ${port}!`);
+});
+
+app.get(`${apiUrl}`, (req, res) => {
+  return res.send(`Your bank server is running on port ${port}!`);
+});
+
 app.get(`${apiUrl}/account/:accountNo`, (req, res) => {
-  console.log("HERE");
   Account.findOne({ accountNo: req.params.accountNo }, (err, account) => {
     if (err) {
       console.log(err);
@@ -111,4 +119,4 @@ app.post(
   }
 );
 
-app.listen(4002);
+app.listen(port);
