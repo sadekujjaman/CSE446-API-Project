@@ -10,11 +10,18 @@ This is a [NodeJS](https://nodejs.org/en) project bootstrapped with [`node`](htt
 
 1. [Node.js](https://nodejs.org/en/) 12.22.0 or later
 2. [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
-3. MacOS, Windows (including WSL), and Linux are supported
+3. [Nodemon](https://www.npmjs.com/package/nodemon), See below installation guide.
+4. MacOS, Windows (including WSL), and Linux are supported
 
 ### Software Requirements
 
 1. [MongoDB](https://www.mongodb.com/): A NoSQL database used for storing data
+
+### Install Nodemon Using npm
+
+```bash
+npm install -g nodemon
+```
 
 ### Setup
 
@@ -40,7 +47,7 @@ yarn dev
 npm run start
 ```
 
-Open [http://localhost:4000](http://localhost:4000) with your browser to see `Your server is running on port 4000!`..
+Open [http://localhost:4000](http://localhost:4000) with your browser to see `Your product-supplier server is running on port 4000!`..
 
 ### FAQ
 
@@ -48,10 +55,17 @@ To work with this project one must have prepare a environment file with followin
 The file name should be `.env` and must contain in the `product-supplier` directory.
 
 ```
-MONGODB_URI=mongodb+srv://<username>:<password>@graphql-demo.cew73.mongodb.net/product-supplier?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<username>:<password>@<host>.mongodb.net/<product-supplier-collection-name>?retryWrites=true&w=majority
 ```
 
-\*\*\* Replace `<username>` and `<password>` with your mongodb username and password respectfully.
+\*\*\* Replace `<username>` and `<password>` with your mongodb username and password respectfully. Replace `<host>` with your mongodb host name. Also replace `bank-collection-name` with your product-supplier collection name in mongodb.
+
+Here is an example of `MONGODB_URI`:
+
+```bash
+MONGODB_URI=mongodb+srv://testuser:insecure@graphql-demo.cew73.mongodb.net/product-supplier?retryWrites=true&w=majority
+
+```
 
 You can get this `MONGODB_URI` from your mongodb atlas account. [Mongodb Atlas/](https://cloud.mongodb.com/).
 To set the step by step setup for MongoDB, visit [MongoDB Setup](https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier/mongodb-setup)

@@ -16,11 +16,11 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 app.use(upload.array());
 
 app.get("", (req, res) => {
-  return res.send(`Your server is running on port ${port}!`);
+  return res.send(`Your product-supplier server is running on port ${port}!`);
 });
 
 app.get(`${apiUrl}`, (req, res) => {
-  return res.send(`Your server is running on port ${port}!`);
+  return res.send(`Your product-supplier server is running on port ${port}!`);
 });
 
 app.get(`${apiUrl}/products`, (req, res) => {
