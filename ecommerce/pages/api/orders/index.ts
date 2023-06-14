@@ -1,8 +1,9 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { BANK_API_ROUTE, SUPPLIER_API_ROUTE } from "../../utils/constant";
 
-const ECOMMERCE_ACCOUNT_NO = "909090";
-const SUPPLIER_ACCOUNT_NO = "808080";
+const ECOMMERCE_ACCOUNT_NO = process.env.NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO;
+const SUPPLIER_ACCOUNT_NO = process.env.NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO;
 const ECOMMERCE_RATE = 0.1;
 
 export default async function handler(
@@ -17,7 +18,7 @@ export default async function handler(
 
       const { accountNo } = user;
       const { data } = await axios.get(
-        `http://localhost:4002/api/v1/account/${accountNo}`
+        `${BANK_API_ROUTE}/account/${accountNo}`
       );
       const userAccount = data?.account;
       if (!userAccount) {
@@ -28,7 +29,7 @@ export default async function handler(
       }
 
       const { data: user_ecommerce } = await axios.post(
-        `http://localhost:4002/api/v1/transaction/make-transaction`,
+        `${BANK_API_ROUTE}/transaction/make-transaction`,
         {
           senderAccountNo: userAccount.accountNo,
           receiverAccountNo: ECOMMERCE_ACCOUNT_NO,
@@ -38,7 +39,7 @@ export default async function handler(
       const userTransactionId = user_ecommerce.transactionId;
       const supplierAmount = amount - amount * ECOMMERCE_RATE;
       const { data: ecommerce_supplier } = await axios.post(
-        `http://localhost:4002/api/v1/transaction/make-transaction`,
+        `${BANK_API_ROUTE}/transaction/make-transaction`,
         {
           senderAccountNo: ECOMMERCE_ACCOUNT_NO,
           receiverAccountNo: SUPPLIER_ACCOUNT_NO,
@@ -49,7 +50,7 @@ export default async function handler(
       const supplierTransactionId = ecommerce_supplier.transactionId;
 
       const { data: order_data } = await axios.post(
-        `http://localhost:4000/api/v1/createOrder`,
+        `${SUPPLIER_API_ROUTE}/createOrder`,
         {
           products,
           address,
@@ -66,7 +67,7 @@ export default async function handler(
   }
   if (req.method === "GET") {
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/v1/orders`);
+      const { data } = await axios.get(`${SUPPLIER_API_ROUTE}/orders`);
 
       if (data?.orders) {
         const updatedOrders = data?.orders?.map((order: { amount: number }) => {

@@ -1,33 +1,42 @@
+# CSE446-API-Project
+
+### Ecommerce
+
+#### This project will covers all the functionalities related to a ecommerce site.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Project Distribution
----------------------------------------------
-
-This project `Project Distribution` is developed using ![NextJs](https://nextjs.org/).
-
 
 ### System Requirements
 
-1. ![Node.js](https://nodejs.org/en/) 12.22.0 or later
-2. ![NPM](https://www.npmjs.com/) or ![Yarn](https://yarnpkg.com/)
-3. MacOS, Windows (including WSL), and Linux are supported
+1. [Node.js](https://nodejs.org/en/) 12.22.0 or later
+2. [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+3. [Nodemon](https://www.npmjs.com/package/nodemon), See below installation guide.
+4. MacOS, Windows (including WSL), and Linux are supported
 
 ### Software Requirements
-For authentication, we're going to use ![Next-Auth](https://next-auth.js.org/), which is a complete open-source authentication solution for Next.js applications,
-And ![Supabase](https://supabase.com/) database to store our data, which is also an open-source firebase alternative.
-To work with this project, one must have the following credentials.
-1. ![Github oAuth](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps) credentials,(Github Id and Secret)
-2. ![Google oAuth](https://developers.google.com/identity/protocols/oauth2) credentials, (Google Id and Secret)
-3. ![Supabase](https://supabase.com/) credentials, (Supabase URL and ANON key)
 
+1. [MongoDB](https://www.mongodb.com/): A NoSQL database used for storing data
+
+### Install Nodemon Using npm
+
+```bash
+npm install -g nodemon
+```
 
 ### Setup
 
-First, install the dependencies for this project:
+First, install the dependencies for this project (Make sure you're in the `ecommerce` directory):
+
+To change the directory to `ecommerce`,
+
+```bash
+cd ecommerce
+```
+
 ```bash
 yarn
 # or
-npm
+npm install
 ```
 
 Then, run the development server:
@@ -37,47 +46,128 @@ yarn dev
 # or
 npm run dev
 ```
-Using `yarn` for both cases is recommended
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see home page like this,
+![Home Page](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/ecommerce/images/home.png)
 
-### FAQ
-To work with this project one must have prepare a environment file with following properties. 
-The file name should be `.env.local` and must contain in the project directory.
-```
+### Additional Setup to work properly
+
+#### Environment Setup
+
+To work with this project one must have prepare a environment file with following properties.
+The file name should be `.env.local` and must contain in the `ecommerce` directory.
+
+Step - 1: NextAuth Setup
+To handle login, we used [NextAuth](https://next-auth.js.org/), it is easy to use and easy to manage. NextAuth provides many providers such as Google Login, GitHub Login, etc. Here we simply used Google Login.
+
+You can get the detailed configuration for next-auth Google Login [here](https://next-auth.js.org/providers/google).
+
+To setup next-auth Google login, we need two config. One is `GOOGLE_ID` and another is `GOOGLE_SECRET`. You can get those from your [google console](https://console.developers.google.com/apis/credentials). To see step by step setup for `GOOGLE_SECRET`, visit this page - [Next-Auth-Google-Provider](https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-googleprovider-make-sure-you-have-a-google-account)
+
+```bash
 NEXTAUTH_URL=http://localhost:3000
-NEXT_PUBLIC_SUPABASE_URL= SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY= SUPABASE_ANON_KEY
-GOOGLE_ID= GOOGLE_OAuth_ID
-GOOGLE_SECRET= GOOGLE_OAuth_SECRET
-GITHUB_ID= GITHUB_OAuth_ID
-GITHUB_SECRET= GITHUB_OAuth_SECRET
+GOOGLE_ID=GOOGLE_ID_GOES_HERE
+GOOGLE_SECRET=GOOGLE_SECRET_GOES_HERE
 ```
 
-To get more info:
+Step - 2: MongoDB Setup
 
-1. ![NextJs Quick Start](https://nextjs.org/docs/getting-started)
-2. ![Supabase Quick Start](https://supabase.com/docs/guides/with-nextjs)
-4. ![Next-Auth Google oAuth](https://next-auth.js.org/providers/google)
-5. ![Next-Auth Github oAuth](https://next-auth.js.org/providers/github)
+```bash
+NEXT_ATLAS_URI=MOGODB_ATLAS_URL_GOES_HERE
+NEXT_ECOMMERCE_DB_NAME=ecommerce
+```
 
+N.B - In this `NEXT_ATLAS_URI` don't mention your db name, just put the root URL of your mongodb atlas. Something like this:
 
+```bash
+NEXT_ATLAS_URI=mongodb+srv://<username>:<password>@abcdefcew73.mongodb.net
+NEXT_ECOMMERCE_DB_NAME=ecommerce
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Step - 3: Run Supplier Project
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+To run the supplier project, you can get a detailed guide [here](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/README.md).
 
-## Learn More
+```bash
+cd product-supplier
+npm install
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+N.B - Add this supplier's api url to e-commerce's `env.local` file.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+NEXT_PUBLIC_SUPPLIER_API_ROUTE=http://localhost:4000/api/v1
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+After running the `product-supplier` project, please create 1 or 2 products with the supplier api.
+You can follow the setup guide for `product-supplier` [Supplier](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/README.md)
 
-## Deploy on Vercel
+Step - 4: Run Bank Project
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To run the bank project, you can get a detailed guide [here](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/bank/README.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+cd bank
+npm install
+npm run start
+```
+
+N.B - Add this bank's api url to e-commerce's `env.local` file.
+
+```bash
+NEXT_PUBLIC_BANK_API_ROUTE=http://localhost:4002/api/v1
+```
+
+After running the `bank` project, you must need to create 2 bank account with bank api.
+
+1. One account for product-supplier - [Create a new bank account](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/bank/README.md#create-a-new-bank-account).
+
+```bash
+{
+    "name": "Mr supplier",
+    "email": "supplier@abc.co",
+    "address": "supplier address",
+    "accountNo": "808080",
+    "balance": 10000
+}
+```
+
+N.B - Add this supplier's account no to e-commerce's `env.local` file.
+
+```bash
+NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080;
+```
+
+2. Another account for ecommerce - [Create a new bank account](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/bank/README.md#create-a-new-bank-account)
+
+```bash
+{
+    "name": "Mr ecommerce",
+    "email": "ecommerce@xyz.co",
+    "address": "ecommerce address",
+    "accountNo": "909090",
+    "balance": 10000
+}
+```
+
+N.B - Add this bank's account no to e-commerce's `env.local` file.
+
+```bash
+NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090;
+```
+
+The final `.env.local` file will looks something like this:
+
+```bash
+NEXTAUTH_URL=http://localhost:3000
+GOOGLE_ID=GOOGLE_ID_GOES_HERE
+GOOGLE_SECRET=GOOGLE_SECRET_GOES_HERE
+NEXT_ATLAS_URI=mongodb+srv://myuser:mypassword@abc.cew73.mongodb.net
+NEXT_ECOMMERCE_DB_NAME=ecommerce
+NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090;
+NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080;
+NEXT_PUBLIC_SUPPLIER_API_ROUTE=http://localhost:4000/api/v1
+NEXT_PUBLIC_BANK_API_ROUTE=http://localhost:4002/api/v1
+
+```

@@ -1,24 +1,25 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
+import { BANK_API_ROUTE } from "../../../utils/constant";
+
+const bankDatabaseName = process.env.NEXT_BANK_DB_NAME as string;
+const bankAccountCollectionName = "accounts";
+const ecommerceDatabaseName = process.env.NEXT_ECOMMERCE_DB_NAME as string;
+const userCollectionName = "users";
 
 const getBankInfo = async (email: string) => {
-  const { database } = await connectToDatabase("bank");
-  const collection = database.collection("accounts");
-  const results = await collection.find({ email }).limit(1).toArray();
-
-  if (!results || results.length === 0) {
-    return null;
-  }
-  return results[0];
+  const { data } = await axios.get(`${BANK_API_ROUTE}/account/email/${email}`);
+  const account = data?.account;
+  return account;
 };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { database } = await connectToDatabase("graphql-demo");
-  const collection = database.collection("users");
+  const { database } = await connectToDatabase(ecommerceDatabaseName);
+  const collection = database.collection(userCollectionName);
 
   if (req.method === "GET") {
     const email = req.query.email;
@@ -31,14 +32,13 @@ export default async function handler(
     }
     const bank = await getBankInfo(email as string);
     const { balance } = bank || { balance: 0 };
-    console.log({ bank });
     res.status(200).json({ accountInfo: { ...results[0], balance } });
   } else if (req.method === "POST") {
     try {
       const { email, accountNo, accountName, secret, name, contactNo } =
         req.body;
       // const { data } = await axios.get(
-      //   `http://localhost:4002/api/v1/account/${_accountNo}`
+      //   `${BANK_API_ROUTE}/account/${_accountNo}`
       // );
       // const account = data?.account;
       // if (!account) {
