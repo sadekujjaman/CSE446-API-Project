@@ -50,6 +50,7 @@ import {
 import { Row } from "../components/layout/row";
 import { useUser } from "../utils/hooks-context";
 import Box from "@mui/material/Box";
+import { SUPPLIER_API_ROUTE } from "../utils/constant";
 
 const Accordion = styled((props: any) => (
   <MuiAccordion disableGutters elevation={0} square {...props}>
@@ -437,7 +438,7 @@ const ProductDashboard = () => {
 
   const fetchProducts = async () => {
     const { data } = await axios.get(
-      `http://localhost:4000/api/v1/product/${productId}`,
+      `${SUPPLIER_API_ROUTE}/product/${productId}`,
       {}
     );
     console.log(data);

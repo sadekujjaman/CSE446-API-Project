@@ -6,6 +6,7 @@ import { ProductList } from "./components/page-component/product-list";
 import { Product } from "./types/utils";
 
 import { Container } from "@mui/material";
+import { SUPPLIER_API_ROUTE } from "./utils/constant";
 
 const Home: NextPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,12 +15,14 @@ const Home: NextPage = () => {
   }, []);
 
   const fetchProducts = async () => {
-    const { data } = await axios.get(
-      "http://localhost:4000/api/v1/products/",
-      {}
-    );
+    try {
+      const { data } = await axios.get(`${SUPPLIER_API_ROUTE}/products/`, {});
 
-    setProducts(data.products);
+      setProducts(data.products);
+    } catch (err) {
+      console.log(err);
+      setProducts([]);
+    }
   };
   const contents = (
     <Container sx={{ maxWidth: "800px", margin: "auto" }}>

@@ -55,17 +55,19 @@ To work with this project one must have prepare a environment file with followin
 The file name should be `.env` and must contain in the `product-supplier` directory.
 
 ```
-MONGODB_URI=mongodb+srv://<username>:<password>@<host>.mongodb.net/<product-supplier-collection-name>?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<username>:<password>@<host>.mongodb.net/<product-supplier-db-name>
 ```
 
-\*\*\* Replace `<username>` and `<password>` with your mongodb username and password respectfully. Replace `<host>` with your mongodb host name. Also replace `bank-collection-name` with your product-supplier collection name in mongodb.
+\*\*\* Replace `<username>` and `<password>` with your mongodb username and password respectfully. Replace `<host>` with your mongodb host name. Also replace `product-supplier-db-name` with your product-supplier db name in mongodb.
 
 Here is an example of `MONGODB_URI`:
 
 ```bash
-MONGODB_URI=mongodb+srv://testuser:insecure@graphql-demo.cew73.mongodb.net/product-supplier?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://myself:mypassword@graphql-demo.cew73.mongodb.net/product-supplier
 
 ```
+
+N.B - Don't forget to add `product-supplier` after the `MONGODB_URI`
 
 You can get this `MONGODB_URI` from your mongodb atlas account. [Mongodb Atlas/](https://cloud.mongodb.com/).
 To set the step by step setup for MongoDB, visit [MongoDB Setup](https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier/mongodb-setup)

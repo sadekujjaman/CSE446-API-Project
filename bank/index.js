@@ -26,6 +26,21 @@ app.get(`${apiUrl}`, (req, res) => {
   return res.send(`Your bank server is running on port ${port}!`);
 });
 
+app.get(`${apiUrl}/account/email/:email`, (req, res) => {
+  Account.findOne({ email: req.params.email }, (err, account) => {
+    if (err) {
+      console.log(err);
+      return res.json({ error: "Error occurred during fetching account" });
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    return res.json({ account });
+  });
+});
+
 app.get(`${apiUrl}/account/:accountNo`, (req, res) => {
   Account.findOne({ accountNo: req.params.accountNo }, (err, account) => {
     if (err) {

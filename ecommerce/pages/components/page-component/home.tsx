@@ -8,6 +8,7 @@ import { ProductList } from "./product-list";
 import { CourseList } from "./course-list";
 import { Banner } from "./banner";
 import { useUser } from "../../utils/hooks-context";
+import { SUPPLIER_API_ROUTE } from "../../utils/constant";
 
 const IntroPage = styled.div`
   .intro__page {
@@ -42,12 +43,14 @@ export const Intro = () => {
   }, []);
 
   const fetchProducts = async () => {
-    const { data } = await axios.get(
-      "http://localhost:4000/api/v1/products/",
-      {}
-    );
+    try {
+      const { data } = await axios.get(`${SUPPLIER_API_ROUTE}/products/`, {});
 
-    setProducts(data.products);
+      setProducts(data.products);
+    } catch (err) {
+      console.log(err);
+      setProducts([]);
+    }
   };
 
   return (

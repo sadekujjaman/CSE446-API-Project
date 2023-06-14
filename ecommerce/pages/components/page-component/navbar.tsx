@@ -110,6 +110,7 @@ export const Nav = ({
 
   useEffect(() => {
     const fetchUser = async () => {
+      console.log("HERE");
       try {
         const { data } = await axios.get(
           `/api/users/email/${session.user.email}`
@@ -127,7 +128,7 @@ export const Nav = ({
         console.log(e);
       }
     };
-
+    console.log({ session }, session?.user, user);
     session && session.user && !user && fetchUser();
   }, [session, user]);
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { SUPPLIER_API_ROUTE } from "../../utils/constant";
 
 const ECOMMERCE_ACCOUNT_NO = "909090";
 const SUPPLIER_ACCOUNT_NO = "808080";
@@ -14,7 +15,7 @@ export default async function handler(
       const { orderId, updatedStatus } = req.body;
 
       const { data: order_data } = await axios.post(
-        `http://localhost:4000/api/v1/order/updateOrderStatus`,
+        `${SUPPLIER_API_ROUTE}/order/updateOrderStatus`,
         {
           orderId,
           updatedStatus,

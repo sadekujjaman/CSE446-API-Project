@@ -95,7 +95,6 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
   const [session, loading] = useSession();
   const [open, setOpen] = useState(false);
   const [addingBankAccount, setAddingBankAccount] = useState(false);
-  const [courseJoiningError, setCourseJoiningError] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -201,11 +200,6 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                   handleModalOpen={handleModalOpen}
                   handleModalClose={handleModalClose}
                 />
-                {/* <IconButton color="inherit" sx={{ float: "right" }}>
-                  <Badge badgeContent={4} color="primary">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton> */}
               </Toolbar>
             </AppBar>
 
@@ -229,16 +223,8 @@ export const WrapperPage = ({ children, title }: PageProps): JSX.Element => {
                 </IconButton>
               </Toolbar>
               <Divider />
-              {/* <MainListItems /> */}
-              {/* <Divider />
-              <List>
-                <SecondaryListItems />
-              </List> */}
             </Drawer>
-            <div style={{ marginTop: "100px" }}>
-              {children()}
-              {/* {session && !loading && <div>{children()}</div>} */}
-            </div>
+            <div style={{ marginTop: "100px" }}>{children()}</div>
             <Modal
               open={modalOpen}
               onClose={handleModalClose}
