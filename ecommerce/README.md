@@ -137,7 +137,7 @@ After running the `bank` project, you must need to create 2 bank account with ba
 N.B - Add this supplier's account no to e-commerce's `env.local` file.
 
 ```bash
-NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080;
+NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080
 ```
 
 2. Another account for ecommerce - [Create a new bank account](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/bank/README.md#create-a-new-bank-account)
@@ -155,7 +155,7 @@ NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080;
 N.B - Add this bank's account no to e-commerce's `env.local` file.
 
 ```bash
-NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090;
+NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090
 ```
 
 The final `.env.local` file will looks something like this:
@@ -166,9 +166,15 @@ GOOGLE_ID=GOOGLE_ID_GOES_HERE
 GOOGLE_SECRET=GOOGLE_SECRET_GOES_HERE
 NEXT_ATLAS_URI=mongodb+srv://myuser:mypassword@abc.cew73.mongodb.net
 NEXT_ECOMMERCE_DB_NAME=ecommerce
-NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090;
-NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080;
+NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090
+NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080
 NEXT_PUBLIC_SUPPLIER_API_ROUTE=http://localhost:4000/api/v1
 NEXT_PUBLIC_BANK_API_ROUTE=http://localhost:4002/api/v1
 
 ```
+
+### Login
+
+Now you can log in to the app. After successful login, you might be asked to set up your bank details. The bank details must be a valid account no and must be created through bank API. You can create your bank account from the bank API - [Create a new bank account](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/bank/README.md#create-a-new-bank-account).
+
+![Home Page](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/ecommerce/images/bank-details.png)
