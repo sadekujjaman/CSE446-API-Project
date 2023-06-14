@@ -3,8 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { BANK_API_ROUTE } from "../../../utils/constant";
 
-const bankDatabaseName = process.env.NEXT_BANK_DB_NAME as string;
-const bankAccountCollectionName = "accounts";
 const ecommerceDatabaseName = process.env.NEXT_ECOMMERCE_DB_NAME as string;
 const userCollectionName = "users";
 
