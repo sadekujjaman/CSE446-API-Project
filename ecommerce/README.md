@@ -58,6 +58,7 @@ To work with this project one must have prepare a environment file with followin
 The file name should be `.env.local` and must contain in the `ecommerce` directory.
 
 Step - 1: NextAuth Setup
+
 To handle login, we used [NextAuth](https://next-auth.js.org/), it is easy to use and easy to manage. NextAuth provides many providers such as Google Login, GitHub Login, etc. Here we simply used Google Login.
 
 You can get the detailed configuration for next-auth Google Login [here](https://next-auth.js.org/providers/google).
@@ -101,7 +102,7 @@ NEXT_PUBLIC_SUPPLIER_API_ROUTE=http://localhost:4000/api/v1
 ```
 
 After running the `product-supplier` project, please create 1 or 2 products with the supplier api.
-You can follow the setup guide for `product-supplier` [Supplier](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/product-supplier/README.md)
+You can follow the setup guide for `product-supplier` [Supplier Product Creation](https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier#create-a-new-product)
 
 Step - 4: Run Bank Project
 
