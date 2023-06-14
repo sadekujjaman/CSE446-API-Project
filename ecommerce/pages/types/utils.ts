@@ -22,7 +22,7 @@ export type User = {
   accountNo?: string;
   secret?: string;
   balance?: number;
-  isSupllier?: boolean;
+  isSupplier?: boolean;
 } & UserInfo;
 
 export type Address = {

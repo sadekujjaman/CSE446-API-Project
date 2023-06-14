@@ -34,9 +34,12 @@ const OrderDashboard = () => {
   const { user } = useUser();
 
   const fetchOrders = async () => {
-    const { data } = await axios.get("/api/orders");
-    console.log({ data });
-    setOrders(data.orders);
+    try {
+      const { data } = await axios.get("/api/orders");
+      setOrders(data.orders);
+    } catch (err) {
+      setOrders([]);
+    }
   };
 
   useEffect(() => {
@@ -65,16 +68,6 @@ const OrderDashboard = () => {
       updatedStatus,
     });
     if (data?.status === "Ok") {
-      //   setOrders((prevOrders) => {
-      //     const newOrders = prevOrders?.map((o) => {
-      //       const updatedOrder = { ...o };
-      //       if (o.orderId === order.orderId) {
-      //         updatedOrder.status = updatedStatus;
-      //       }
-      //       return updatedOrder;
-      //     });
-      //     return newOrders;
-      //   });
       await fetchOrders();
     }
   };
@@ -149,7 +142,7 @@ const OrderDashboard = () => {
                     {order.orderAt}
                   </TableCell>
                   <TableCell style={{ width: "12%" }} align="center">
-                    {user?.isSupllier ? (
+                    {user?.isSupplier ? (
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">
                           Status
