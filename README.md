@@ -13,6 +13,6 @@ To develop API-based websites to simulate the functionalities of e-commerce serv
 ### Links
 
 1. Main: https://github.com/sadekujjaman/CSE446-API-Project
-2. E-commerce: https://github.com/sadekujjaman/CSE446-API-Project/blob/main/README.md
-3. Bank: https://github.com/sadekujjaman/CSE446-API-Project/blob/main/bank/README.md
-4. Product supplier: https://github.com/sadekujjaman/CSE446-API-Project/blob/main/product-supplier/README.md
+2. E-commerce: https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/ecommerce
+3. Bank: https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/bank
+4. Product supplier: https://github.com/sadekujjaman/CSE446-API-Project/tree/develop/product-supplier
