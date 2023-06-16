@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
-import { Address, Course, Project, User } from "../types/utils";
+import { User } from "../types/utils";
 
-const SUPPLIER_DOMAIN = "prism";
+const SUPPLIER_EMAIL = process.env.NEXT_PUBLIC_SUPPLIER_EMAIL;
 
 interface UserContextType {
   user: User | null;
@@ -23,7 +23,7 @@ export const UserProvider = ({ children }: { children: any }) => {
   const updateUser = (newUser: User) => {
     setUser(() => {
       const { email } = newUser;
-      if (email && email.includes(SUPPLIER_DOMAIN)) {
+      if (email && email === SUPPLIER_EMAIL) {
         newUser["isSupplier"] = true;
       }
       return newUser;

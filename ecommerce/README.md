@@ -158,6 +158,19 @@ N.B - Add this bank's account no to e-commerce's `env.local` file.
 NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090
 ```
 
+### Supplier Login
+
+To change order status, you must be logged in as a supplier. To become a supplier, you only need to add your supplier email in the `.env.local`.
+
+```bash
+NEXT_PUBLIC_SUPPLIER_EMAIL=saju@recruit.so
+```
+
+N.B - update this with your email.
+After logged in with this supplier email, go to the `http://localhost:3000/orders` and you'll see your order list and you can change order status;
+Here is the screenshot:
+![Update order status](https://github.com/sadekujjaman/CSE446-API-Project/blob/develop/ecommerce/images/update-order-status.png)
+
 The final `.env.local` file will looks something like this:
 
 ```bash
@@ -170,8 +183,11 @@ NEXT_PUBLIC_ECOMMERCE_BANK_ACCOUNT_NO=909090
 NEXT_PUBLIC_SUPPLIER_BANK_ACCOUNT_NO=808080
 NEXT_PUBLIC_SUPPLIER_API_ROUTE=http://localhost:4000/api/v1
 NEXT_PUBLIC_BANK_API_ROUTE=http://localhost:4002/api/v1
+NEXT_PUBLIC_SUPPLIER_EMAIL=your-email@abc.com
 
 ```
+
+N.B - After chaning `.env.local` or `.env`, you must restart your server.
 
 ### Login
 
